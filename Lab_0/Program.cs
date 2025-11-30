@@ -33,7 +33,7 @@ namespace ConsoleApp111
                     Console.Write($"{Arr1[i]}\t");
                 }
 
-                Console.Write("\n\nСумма 1/(а[i-1] * a[i] * a[i+1]) = "); 
+                Console.Write("\n\nСумма 5/(а[i-1] * a[i] * a[i+1]) = "); 
 
                
                 float Rec(int i) 
@@ -43,7 +43,7 @@ namespace ConsoleApp111
                                                           
 
                     float f; 
-                    f = (1 / (Arr1[i - 1] * Arr1[i] * Arr1[i + 1]));
+                    f = (5 / (Arr1[i - 1] * Arr1[i] * Arr1[i + 1]));
 
                     return f + Rec(i + 1);
                 }
