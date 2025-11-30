@@ -20,7 +20,7 @@ namespace ConsoleApp111
 
             if (n < 3) 
             {
-                Console.WriteLine("\nПожалуйста введите n >= 3!");
+                Console.WriteLine("\nПожалуйста, введите n >= 3!");
             }
             else 
             {
