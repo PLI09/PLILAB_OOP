@@ -24,7 +24,7 @@ namespace ConsoleApp111
             }
             else 
             {
-                Random R = new Random(); 
+                Random R = new Random();// Заполняем массив рандомными числами 
                 float[] Arr1 = new float[n]; 
                 Console.WriteLine("\nЦелочисленный массив:\n"); 
                 for (int i = 0; i < n; i++)
