@@ -42,10 +42,10 @@ namespace ConsoleApp111
                     if (i == (Arr1.Length) - 1) return 0; 
                                                           
 
-                    float res; 
-                    res = (5 / (Arr1[i - 1] * Arr1[i] * Arr1[i + 1]));
+                    float res1; 
+                    res1 = (5 / (Arr1[i - 1] * Arr1[i] * Arr1[i + 1]));
 
-                    return res + Rec(i + 1);
+                    return res1 + Rec(i + 1);
                 }
 
                 Console.WriteLine(Rec(1));
