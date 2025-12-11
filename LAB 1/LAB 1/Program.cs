@@ -92,7 +92,7 @@ namespace LAB_1
             Console.WriteLine(personConsole.GetInfo());
 
             // 5 Генерация рандомной персоны
-            Person randomPerson = PersonGenerate.GenerateRandomPerson();
+            Person randomPerson = GetRandomPerson.GenerateRandomPerson();
             personList1.AddPerson(randomPerson);
             Console.WriteLine(
                 $"Список №1 после добавление рандомной персоны:\n" +

@@ -7,7 +7,7 @@ namespace Model
     /// Класс PersonGenerate для 
     /// создания рандомного человека.
     /// </summary>
-    public class PersonGenerate
+    public class GetRandomPerson
     {
         /// <summary>
         /// Метод создания рандомного человека.

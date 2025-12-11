@@ -1,6 +1,9 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\LAB 1",
+    "\\LAB 1\\Model"
   ],
+  "SelectedNode": "\\LAB 1\\Model\\PersonGenerate.cs",
   "PreviewInSolutionExplorer": false
 }
