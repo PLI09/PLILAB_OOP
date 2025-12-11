@@ -92,8 +92,6 @@ namespace Model
             }
         }
 
-
-
         /// <summary>
         /// Задание фамилии.
         /// </summary>
@@ -156,8 +154,6 @@ namespace Model
             TextInfo txt = CultureInfo.CurrentCulture.TextInfo;
             return txt.ToTitleCase(name.ToLower());
         }
-
-
 
         /// <summary>
         /// Валидация имени или фамилии.
