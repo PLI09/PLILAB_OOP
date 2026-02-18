@@ -14,6 +14,7 @@ namespace LAB_1
         /// </summary>
         private static void Main()
         {
+            статик связано с памятью, инкапсуляцие задача таким образом констр классы чтобы они работали с абстрациями которые у нас есть . Нам нужно сложность уменьшать. 
             // 3.a Создание двух списков персон по три человека
             PersonList personList1 = new PersonList();
             PersonList personList2 = new PersonList();
