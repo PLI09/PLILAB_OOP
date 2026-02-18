@@ -5,7 +5,6 @@ using System.Reflection;
 
 namespace LAB_1
 {
-    //TOOD: refactor
     /// <summary>
     /// Класс ConsolePerson.
     /// </summary>
