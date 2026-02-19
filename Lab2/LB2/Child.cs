@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace LB2
+﻿namespace LB2
 {
     /// <summary>
     /// Дочерний класс: ребенок
@@ -31,6 +29,16 @@ namespace LB2
         /// Максимальный возраст человека
         /// </summary>
         private const int MaxAge = 18;
+
+        /// <summary>
+        /// Минимальный возраст ребенка, идущего в детский сад
+        /// </summary>
+        private const int MinAgeKindergarten = 2;
+
+        /// <summary>
+        /// Минимальный возраст ребенка, идущего в школу
+        /// </summary>
+        private const int MinAgeSchool = 6;
 
         /// <summary>
         /// Свойство для доступа к private полям
@@ -83,7 +91,7 @@ namespace LB2
             }
         }
 
-        //TODO: autoproperty
+        //TODO: autoproperty +
         /// <summary>
         /// Аксессор для школы ребенка
         /// </summary>
@@ -95,16 +103,16 @@ namespace LB2
             }
             set
             {
-                //TODO: validation?
+                //TODO: validation? +
+                if (string.IsNullOrEmpty(value))
+                {
+                    throw new Exception("Поле не должно быть пустым");
+                }
                 _school = value;
             }
         }
-       
-        //TODO: remove
-        /// <summary>
-        /// Конструктор по умолчанию 
-        /// </summary>
-        protected Child() { }
+
+        //TODO: remove +
 
         /// <summary>
         /// Проверка возраста ребенка
@@ -127,14 +135,14 @@ namespace LB2
         /// <returns>Информация о ребенке</returns>
         public override string GetInfo()
         {
-            string fatherInfo = Father != null 
-                ? $"Отец:{Father.Name} {Father.Surname}" 
+            string fatherInfo = Father != null
+                ? $"Отец:{Father.Name} {Father.Surname}"
                 : "Отец отсутствует";
-            string motherInfo = Mother != null 
-                ? $"Мать:{Mother.Name} {Mother.Surname}" 
+            string motherInfo = Mother != null
+                ? $"Мать:{Mother.Name} {Mother.Surname}"
                 : "Мать отсутствует";
 
-            return $"{GetPersonInfo()};\n {fatherInfo};\n " +
+            return $"{base.GetInfo()};\n {fatherInfo};\n " +
                 $"{motherInfo};\n {School}\n";
         }
 
@@ -153,7 +161,7 @@ namespace LB2
                 throw new Exception($"Пол родителя должен быть другой!");
             }
         }
-        
+
         /// <summary>
         /// Метод для создания родителей
         /// </summary>
@@ -179,33 +187,33 @@ namespace LB2
         /// <returns>Данные о случайном ребенке</returns>
         public static Child GetRandomChild()
         {
-            string[] nameMaleList = 
-            { 
-                "Александр", "Дмитрий" 
+            string[] nameMaleList =
+            {
+                "Александр", "Дмитрий"
             };
-            string[] nameFemaleList = 
-            { 
-                "Анастасия", "Екатерина" 
+            string[] nameFemaleList =
+            {
+                "Анастасия", "Екатерина"
             };
-            string[] surnameMaleList = 
-            { 
-                "Иванов", "Петров" 
+            string[] surnameMaleList =
+            {
+                "Иванов", "Петров"
             };
-            string[] surnameFemaleList = 
-            { 
-                "Иванова", "Петрова" 
+            string[] surnameFemaleList =
+            {
+                "Иванова", "Петрова"
             };
-            Gender[] genderList = 
-            { 
-                Gender.Male, Gender.Female 
+            Gender[] genderList =
+            {
+                Gender.Male, Gender.Female
             };
-            string[] schoolList = 
-            { 
-                "БСОШ №1", "БСОШ №2", "Лицей при ТПУ", "Школу не посещает" 
+            string[] schoolList =
+            {
+                "БСОШ №1", "БСОШ №2", "Лицей при ТПУ", "Школу не посещает"
             };
-            string[] kindergartenList = 
-            { 
-                "Детский сад №1", "Детский сад №2", "Детский сад не посещает" 
+            string[] kindergartenList =
+            {
+                "Детский сад №1", "Детский сад №2", "Детский сад не посещает"
             };
 
             Random random = new Random();
@@ -253,18 +261,18 @@ namespace LB2
                     parentMother.Surname = parentFather.Surname + "а";
                 }
                 else
-                { 
+                {
                     parentFather.Surname = parentMother.Surname.Trim('а');
                 }
             }
 
-            //TODO: magic (to const)
-            string tmpStudent = age > 6
+            //TODO: magic (to const) +
+            string tmpStudent = age > MinAgeKindergarten
                 ? schoolList[random.Next(schoolList.Length)]
-                //TOOD: отступы
-                : ((age > 2) && (age < 7))
-                ? kindergartenList[random.Next(kindergartenList.Length)]
-                : "Образовательное учреждение не посещает";
+                //TOOD: отступы +
+                : ((age > 2) && (age <= MinAgeSchool))
+                    ? kindergartenList[random.Next(kindergartenList.Length)]
+                    : "Образовательное учреждение не посещает";
 
             return new Child(namePerson, surnamePerson, age, gender,
                parentMother, parentFather, tmpStudent);

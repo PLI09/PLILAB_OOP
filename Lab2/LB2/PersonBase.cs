@@ -52,13 +52,7 @@ namespace LB2
             Gender = gender;
         }
 
-        //TODO: remove
-        /// <summary>
-        /// Конструктор класса по умолчанию
-        /// </summary>
-        protected PersonBase() : this("Любовь", "Подопригора",
-            24, Gender.Female)
-        { }
+        //TODO: remove +
 
         /// <summary>
         /// Проверка корректности ввода имени
@@ -125,21 +119,11 @@ namespace LB2
             }
         }
 
-        //TODO: autoproperty
+        //TODO: autoproperty +
         /// <summary>
         /// Проверка корректности ввода пола человека
         /// </summary>
-        public Gender Gender
-        {
-            get
-            {
-                return _gender;
-            }
-            set
-            {
-                _gender = value;
-            }
-        }
+        public Gender Gender {get; set;}
 
         /// <summary>
         /// Вывод информации о человеке
@@ -150,13 +134,16 @@ namespace LB2
             return $"{Name} {Surname}, возраст: {Age}, пол: {Gender}";
         }
 
-        //TODO: virtual?
+        //TODO: virtual? +
         /// <summary>
         /// Абстрактный метод для вывода информации 
         /// о человеке в зависимости от возраста
         /// </summary>
         /// <returns>Информация о человеке</returns>
-        public abstract string GetInfo();
+        public virtual string GetInfo()
+        {
+            return $"{Name} {Surname}, возраст: {Age}, пол: {Gender}";
+        }
 
         /// <summary>
         /// Абстрактный метод для проверки возраста человека

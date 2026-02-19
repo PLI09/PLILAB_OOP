@@ -1,4 +1,5 @@
 ﻿using System;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace LB2
 {
@@ -43,6 +44,11 @@ namespace LB2
         private const int MaxPassportNumber = 999999;
 
         /// <summary>
+        /// Длина номера паспорта
+        /// </summary>
+        private const int PassportNumberLenght = 6;
+
+        /// <summary>
         /// Свойство для доступа к private полям
         /// </summary>
         /// <param name="name">Имя</param>
@@ -63,10 +69,11 @@ namespace LB2
 
         /// <summary>
         /// Конструктор по умолчанию для взрослого человека
-        /// </summary>
-        protected Adult() { }
+        /// </summary
+        protected Adult() : base("Любовь", "Подопригора", 24, Gender.Female)
+        { }
 
-        /// <summary>
+        /// <summary
         /// Проверка ввода паспортных данных
         /// </summary>
         public int PassportInfo
@@ -77,11 +84,11 @@ namespace LB2
             }
             set
             {
-                //TODO: magic (to const)
-                if (Convert.ToString(value).Length != 6)
+                //TODO: magic (to const) +
+                if (Convert.ToString(value).Length != PassportNumberLenght)
                 {
-                    throw new Exception("Номер паспорта " +
-                        "должен содержать 6 цифр");
+                    throw new Exception($"Номер паспорта " +
+                        $"должен содержать {PassportNumberLenght} цифр");
                 }
                 _passportInfo = value;
             }
@@ -98,7 +105,10 @@ namespace LB2
             }
             set
             {
-                //TODO: validation?
+                if (string.IsNullOrEmpty(value))
+                {
+                    throw new Exception("Поле не должно быть пустым");
+                }
                 _jobName = value;
             }
         }
@@ -107,16 +117,12 @@ namespace LB2
         /// Аксессор для информации о супруге 
         /// </summary>
         public Adult Spouse
-        {
-            get
-            {
-                return _spouse;
+        { 
+            get 
+            { 
+                return _spouse; 
             }
-            set
-            {
-                //TODO: validation?
-                _spouse = value;
-            }
+            set { } 
         }
 
         /// <summary>
@@ -155,7 +161,7 @@ namespace LB2
                 jobName = $"Место работы: {JobName}";
             }
 
-            return $"{GetPersonInfo()};\n Номер паспорта: {PassportInfo}; " +
+            return $"{base.GetInfo()};\n Номер паспорта: {PassportInfo}; " +
                 $"\n {marriedInfo}; \n {jobName}. \n";
         }
 
@@ -186,11 +192,7 @@ namespace LB2
                 "Школа №4 г.Москва", "ГАЗПРОМ", "ВТБ Банк",
                 "Агенство недвижимости", "Безработный" 
             };
-            //TODO: refactor
-            string[] spouseStatusList = 
-            { 
-                "Состоит в браке", "Не состоит в браке" 
-            };
+            //TODO: refactor +
 
             Random random = new Random();
 
@@ -204,10 +206,9 @@ namespace LB2
 
             Adult tmpmarried = new Adult();
 
-            var spouseStatus = spouseStatusList[random.
-                Next(spouseStatusList.Length)];
+            var isMarried = random.Next(2) == 0;
 
-            if (spouseStatus == "Состоит в браке")
+            if (isMarried)
             {
                 tmpmarried.Name = (gender == Gender.Male)
                     ? nameFemaleList[random.Next(nameFemaleList.Length)]
