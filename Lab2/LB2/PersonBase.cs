@@ -52,8 +52,6 @@ namespace LB2
             Gender = gender;
         }
 
-        //TODO: remove +
-
         /// <summary>
         /// Проверка корректности ввода имени
         /// </summary>
@@ -119,11 +117,10 @@ namespace LB2
             }
         }
 
-        //TODO: autoproperty +
         /// <summary>
         /// Проверка корректности ввода пола человека
         /// </summary>
-        public Gender Gender {get; set;}
+        public Gender Gender { get; set;}
 
         /// <summary>
         /// Вывод информации о человеке
@@ -134,9 +131,8 @@ namespace LB2
             return $"{Name} {Surname}, возраст: {Age}, пол: {Gender}";
         }
 
-        //TODO: virtual? +
         /// <summary>
-        /// Абстрактный метод для вывода информации 
+        /// Виртуальный метод для вывода информации 
         /// о человеке в зависимости от возраста
         /// </summary>
         /// <returns>Информация о человеке</returns>
