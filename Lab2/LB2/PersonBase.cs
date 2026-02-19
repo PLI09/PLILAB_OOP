@@ -52,6 +52,7 @@ namespace LB2
             Gender = gender;
         }
 
+        //TODO: remove
         /// <summary>
         /// Конструктор класса по умолчанию
         /// </summary>
@@ -124,6 +125,7 @@ namespace LB2
             }
         }
 
+        //TODO: autoproperty
         /// <summary>
         /// Проверка корректности ввода пола человека
         /// </summary>
@@ -148,6 +150,7 @@ namespace LB2
             return $"{Name} {Surname}, возраст: {Age}, пол: {Gender}";
         }
 
+        //TODO: virtual?
         /// <summary>
         /// Абстрактный метод для вывода информации 
         /// о человеке в зависимости от возраста
@@ -162,4 +165,3 @@ namespace LB2
         public abstract void CheckAge(int age);
     }
 }
-

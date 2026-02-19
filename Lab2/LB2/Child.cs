@@ -83,6 +83,7 @@ namespace LB2
             }
         }
 
+        //TODO: autoproperty
         /// <summary>
         /// Аксессор для школы ребенка
         /// </summary>
@@ -94,10 +95,12 @@ namespace LB2
             }
             set
             {
+                //TODO: validation?
                 _school = value;
             }
         }
        
+        //TODO: remove
         /// <summary>
         /// Конструктор по умолчанию 
         /// </summary>
@@ -255,8 +258,10 @@ namespace LB2
                 }
             }
 
+            //TODO: magic (to const)
             string tmpStudent = age > 6
                 ? schoolList[random.Next(schoolList.Length)]
+                //TOOD: отступы
                 : ((age > 2) && (age < 7))
                 ? kindergartenList[random.Next(kindergartenList.Length)]
                 : "Образовательное учреждение не посещает";

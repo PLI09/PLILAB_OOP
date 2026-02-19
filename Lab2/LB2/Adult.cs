@@ -77,6 +77,7 @@ namespace LB2
             }
             set
             {
+                //TODO: magic (to const)
                 if (Convert.ToString(value).Length != 6)
                 {
                     throw new Exception("Номер паспорта " +
@@ -97,6 +98,7 @@ namespace LB2
             }
             set
             {
+                //TODO: validation?
                 _jobName = value;
             }
         }
@@ -112,6 +114,7 @@ namespace LB2
             }
             set
             {
+                //TODO: validation?
                 _spouse = value;
             }
         }
@@ -183,6 +186,7 @@ namespace LB2
                 "Школа №4 г.Москва", "ГАЗПРОМ", "ВТБ Банк",
                 "Агенство недвижимости", "Безработный" 
             };
+            //TODO: refactor
             string[] spouseStatusList = 
             { 
                 "Состоит в браке", "Не состоит в браке" 
