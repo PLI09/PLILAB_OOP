@@ -139,7 +139,7 @@ namespace ConsoleLoader
         /// <summary>
         /// Метод для считывания базовых параметров
         /// </summary>
-        /// <param name="parameters">Параметры</param>
+        /// <param name="parameters">Параметры движения</param>
         /// <returns>Базовые параметры</returns>
         public static List<(Action, string)> 
             ReadBaseParameters(MotionBase parameters) 
