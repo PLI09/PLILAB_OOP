@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Model
+﻿namespace Model
 {
     /// <summary>
     /// Класс для коллебательного движения
@@ -28,9 +21,10 @@ namespace Model
         /// <param name="frequency">частота</param>
         /// <param name="initialPosition">начальная координата</param>
         /// <param name="time">время</param>
+        /// <param name="speed">скорость</param>
         protected OscillatoryMotion(double frequency, 
             double initialPosition, double time, double speed)
-            : base(initialPosition, time,speed)
+            : base(initialPosition, time, speed)
         {
             Frequency = frequency;
         }
@@ -72,11 +66,9 @@ namespace Model
         /// <summary>
         /// Метод для расчета координаты для колебательного движения
         /// </summary>
-        /// <param name="time">время</param>
         /// <returns>координата для колебательного движения</returns>
         public override double GetPosition()
         {
-
             return InitialPosition + (Frequency/Speed) * 
                 Math.Sin(Frequency * Time);
         }

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Model
+﻿namespace Model
 {
     /// <summary>
     /// Базовый класс для всех видов движений
@@ -27,9 +21,11 @@ namespace Model
         private double _speed;
 
         /// <summary>
-        /// Свойство для доступа к private полю
+        /// Конструктор класса
         /// </summary>
-        /// <param name="initialPosition">Начальная координата</param>
+        /// <param name="initialPosition">начальная координата</param>
+        /// <param name="time">время</param>
+        /// <param name="speed">скорость</param>
         protected MotionBase(double initialPosition, 
             double time, double speed) 
         {
@@ -42,7 +38,7 @@ namespace Model
         /// Cвойство для начальной координаты
         /// </summary>
         public double InitialPosition
-        { 
+        {
             get 
             { 
                 return _initialPosition; 
@@ -56,7 +52,6 @@ namespace Model
                 }
                 _initialPosition = value;
             }
-
         }
 
         /// <summary>
@@ -94,6 +89,11 @@ namespace Model
                 {
                     throw new IncorrectArgumentException
                         ("Скорость должна быть конечным числом");
+                }
+                if (value < 0)
+                {
+                    throw new IncorrectArgumentException(
+                        "Скорость не может быть отрицательной");
                 }
                 _speed = value;
             }

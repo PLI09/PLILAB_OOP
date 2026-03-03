@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-
-namespace Model
+﻿namespace Model
 {
     /// <summary>
     /// Класс равномерное движение
@@ -19,10 +12,11 @@ namespace Model
         public UniformMotion() : this(1, 1, 1) { }
 
         /// <summary>
-        /// Конструктор класса 
+        /// 
         /// </summary>
-        /// <param name="initialPosition">Начальная координата</param>
-        /// <param name="speed">Скорость</param>
+        /// <param name="speed"></param>
+        /// <param name="initialPosition"></param>
+        /// <param name="time"></param>
         public UniformMotion(double speed, double initialPosition, 
             double time) : base(initialPosition, time, speed) {}
 
@@ -30,7 +24,6 @@ namespace Model
         /// <summary>
         /// Метод для вычисления координаты для равномерного движения
         /// </summary>
-        /// <param name="time">Время</param>
         /// <returns>Координата для равномерного движения</returns>
         public override double GetPosition()
         {         

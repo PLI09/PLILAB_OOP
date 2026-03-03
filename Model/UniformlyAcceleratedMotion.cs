@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Model
+﻿namespace Model
 {
     /// <summary>
     /// Класс для равноускоренного дивжения
@@ -22,12 +16,12 @@ namespace Model
         public UniformlyAcceleratedMotion(): this (1, 1, 1, 1) { }
         
         /// <summary>
-        /// Конструктор класса
+        /// 
         /// </summary>
-        /// <param name="initialSpeed"></param>
         /// <param name="acceleration"></param>
         /// <param name="initialPosition"></param>
         /// <param name="time"></param>
+        /// <param name="speed"></param>
         public UniformlyAcceleratedMotion(double acceleration, 
             double initialPosition, double time, double speed) 
             : base(initialPosition, time, speed)

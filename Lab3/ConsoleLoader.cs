@@ -1,6 +1,4 @@
-﻿using System;
-using System.Net.Http.Headers;
-using Model;
+﻿using Model;
 
 namespace ConsoleLoader
 {
@@ -71,67 +69,66 @@ namespace ConsoleLoader
             switch (typeMove)
             {
                 case 1:
-                    {
-                        UniformMotion motionUniform = new UniformMotion();
-                        var actionList = ReadBaseParameters(motionUniform);
-                        ActionMove(actionList);
-                        return motionUniform;
-                    }
+                {
+                    UniformMotion motionUniform = new UniformMotion();
+                    var actionList = ReadBaseParameters(motionUniform);
+                    ActionMove(actionList);
+                    return motionUniform;
+                }
                 case 2:
+                {
+                    UniformlyAcceleratedMotion motionAccelerated = 
+                        new UniformlyAcceleratedMotion();
+                    var actionListAccelerated = 
+                        ReadBaseParameters(motionAccelerated);
+                    actionListAccelerated.Add((new Action(() =>
                     {
-                        UniformlyAcceleratedMotion motionAccelerated = 
-                            new UniformlyAcceleratedMotion();
-                        var actionListAccelerated = 
-                            ReadBaseParameters(motionAccelerated);
-                        actionListAccelerated.Add((new Action(() =>
+                        while (true)
                         {
-                            while (true)
+                            try
                             {
-                                try
-                                {
-                                    motionAccelerated.Acceleration =
-                                    Convert.ToDouble(Console.ReadLine());
-                                    break;
-                                }
-                                catch (FormatException)
-                                {
-                                    Console.WriteLine
-                                    ("Введено некорректное значение");
-                                }
+                                motionAccelerated.Acceleration =
+                                Convert.ToDouble(Console.ReadLine());
+                                break;
                             }
-                        }),
-                        "ускорения"));
-                        ActionMove(actionListAccelerated);
-                        return motionAccelerated;
-
-                    }
+                            catch (FormatException)
+                            {
+                                Console.WriteLine
+                                ("Введено некорректное значение");
+                            }
+                        }
+                    }),
+                    "ускорения"));
+                    ActionMove(actionListAccelerated);
+                    return motionAccelerated;
+                }
                 case 3:
+                {
+                    OscillatoryMotion motionOscillatory = 
+                        new OscillatoryMotion();
+                    var actionListOscillatory = 
+                        ReadBaseParameters(motionOscillatory);
+                    actionListOscillatory.Add((new Action(() =>
                     {
-                        OscillatoryMotion motionOscillatory = 
-                            new OscillatoryMotion();
-                        var actionListOscillatory = 
-                            ReadBaseParameters(motionOscillatory);
-                        actionListOscillatory.Add((new Action(() =>
+                        while (true)
                         {
-                            while (true)
+                            try
                             {
-                                try
-                                {
-                                    motionOscillatory.Frequency =
-                                        Convert.ToDouble(Console.ReadLine());
-                                    break;
-                                }
-                                catch (FormatException)
-                                {
-                                    Console.WriteLine
-                                    ("Введено некорректное значение");
-                                }
+                                motionOscillatory.Frequency =
+                                    Convert.ToDouble(Console.ReadLine());
+                                break;
                             }
-                        }),
-                        "частоты"));
-                        ActionMove(actionListOscillatory);
-                        return motionOscillatory;
-                    }
+                            catch (FormatException)
+                            {
+                                Console.WriteLine
+                                ("Введено некорректное значение");
+                            }
+                        }
+                    }),
+                    "частоты"));
+                    ActionMove(actionListOscillatory);
+                    return motionOscillatory;
+                }
             }
             return new UniformMotion();
         }
@@ -141,8 +138,8 @@ namespace ConsoleLoader
         /// </summary>
         /// <param name="parameters">Параметры движения</param>
         /// <returns>Базовые параметры</returns>
-        public static List<(Action, string)> 
-            ReadBaseParameters(MotionBase parameters) 
+        public static List<(Action, string)> ReadBaseParameters
+            (MotionBase parameters) 
         {
             var actionList = new List<(Action, string)>
             {
@@ -186,6 +183,26 @@ namespace ConsoleLoader
 
                     }),
                     "времени"),
+                (new Action(
+                    () =>
+                    {
+                        while (true)
+                        {
+                            try
+                            {
+                                parameters.Speed =
+                                Convert.ToDouble(Console.ReadLine());
+                                break;
+                            }
+                            catch (FormatException)
+                            {
+                                Console.WriteLine
+                                ("Введено некорректное значение");
+                            }
+                        }
+
+                    }),
+                    "скорости"),
             };
             return actionList;
         }
@@ -194,7 +211,7 @@ namespace ConsoleLoader
         /// Заполнение параметров
         /// </summary>
         /// <param name="actionList">Лист с параметрами</param>
-        public static void ActionMove (List<(Action, string)> actionList) 
+        public static void ActionMove (List<(Action, string)> actionList)
         {
             foreach (var action in actionList)
             {
