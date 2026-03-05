@@ -18,6 +18,7 @@ namespace ConsoleLoader
                 "движения: равномерное, равноускоренное, колебательное");
             MotionBase move = ReadParameters();
             if (move == null) return;
+
             Console.WriteLine(move.GetInfo());
             ShowCoordinate(move);
             while (true)
@@ -60,7 +61,6 @@ namespace ConsoleLoader
                     ActionMove(actionList);
                     return motionUniform;
                 }
-                //TODO: отступы+
                 case 2:
                 {
                     UniformlyAcceleratedMotion motionAccelerated =
@@ -114,11 +114,15 @@ namespace ConsoleLoader
         {
             var actionList = new List<(Action, string)>
             {
-                (new Action(() =>
+                //TODO: отступы
+                (
+                    new Action(() =>
                     {
-                         parameters.InitialPosition = 
-                        ReadValidatedDouble("Введите начальную координату:");
-                     }), "начальной координаты"),
+                        parameters.InitialPosition = 
+                           ReadValidatedDouble("Введите начальную координату:");
+                    }), 
+                    "начальной координаты"
+                ),
                 (new Action(() =>
                     {
                         parameters.Time = 
