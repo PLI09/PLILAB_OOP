@@ -71,8 +71,8 @@ namespace ConsoleLoader
                     actionListAccelerated.Add((new Action(() =>
                     {
                         motionAccelerated.Acceleration = 
-                        ReadValidatedDouble
-                        ("Введите ускорение:", nonNegative: false);
+                            ReadValidatedDouble
+                                ("Введите ускорение:", nonNegative: false);
                     }), "ускорения"));
                     ActionMove(actionListAccelerated);
                     return motionAccelerated;
@@ -87,8 +87,8 @@ namespace ConsoleLoader
                     actionListOscillatory.Add((new Action(() =>
                     {
                         motionOscillatory.Frequency = 
-                        ReadValidatedDouble
-                        ("Введите частоту:", nonNegative: true);
+                            ReadValidatedDouble
+                                ("Введите частоту:", nonNegative: true);
                     }), "частоты"));
                     ActionMove(actionListOscillatory);
                     return motionOscillatory;
@@ -114,28 +114,34 @@ namespace ConsoleLoader
         {
             var actionList = new List<(Action, string)>
             {
-                //TODO: отступы
+                //TODO: отступы +
                 (
                     new Action(() =>
                     {
                         parameters.InitialPosition = 
-                           ReadValidatedDouble("Введите начальную координату:");
+                            ReadValidatedDouble
+                                ("Введите начальную координату:");
                     }), 
                     "начальной координаты"
                 ),
-                (new Action(() =>
+                (
+                    new Action(() =>
                     {
                         parameters.Time = 
-                        ReadValidatedDouble
-                        ("Введите время:", nonNegative: true);
-                    }), "времени"),
-
-                (new Action(() =>
+                            ReadValidatedDouble
+                                ("Введите время:", nonNegative: true);
+                    }), 
+                    "времени"
+                ),
+                (
+                    new Action(() =>
                     {
                         parameters.Speed = 
-                        ReadValidatedDouble
-                        ("Введите скорость:", nonNegative: true);
-                    }), "скорости"),
+                            ReadValidatedDouble
+                                ("Введите скорость:", nonNegative: true);
+                    }), 
+                    "скорости"
+                ),
             };
             return actionList;
         }
