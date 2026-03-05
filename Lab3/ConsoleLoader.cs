@@ -217,7 +217,7 @@ namespace ConsoleLoader
             {
                 Console.WriteLine($"Введите значение {action.Item2}");
                 while (true) 
-                {
+                {/*
                     try
                     {
                         action.Item1.Invoke();
@@ -226,7 +226,9 @@ namespace ConsoleLoader
                     catch (IncorrectArgumentException exception)
                     {
                         Console.WriteLine (exception.Message);
-                    }
+                    }*/
+                    action.Item1.Invoke();
+                    break;
                 }
             }
         }
