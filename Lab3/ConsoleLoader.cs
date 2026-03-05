@@ -66,36 +66,39 @@ namespace ConsoleLoader
                     ActionMove(actionList);
                     return motionUniform;
                 }
-                    //TODO: отступы+
+                //TODO: отступы+
                 case 2:
-                {
-                    UniformlyAcceleratedMotion motionAccelerated = 
-                        new UniformlyAcceleratedMotion();
-                    var actionListAccelerated = 
-                        ReadBaseParameters(motionAccelerated);
+                    {
+                        UniformlyAcceleratedMotion motionAccelerated =
+                            new UniformlyAcceleratedMotion();
+                        var actionListAccelerated =
+                            ReadBaseParameters(motionAccelerated);
 
-                    actionListAccelerated.Add((new Action(() =>
-                    {
-                        motionAccelerated.Acceleration = 
-                        ReadValidatedDouble("Введите ускорение:");
-                    }), "ускорения"));
-                    ActionMove(actionListAccelerated);
-                    return motionAccelerated;
-                }
+                        actionListAccelerated.Add((new Action(() =>
+                        {
+                            motionAccelerated.Acceleration = 
+                            ReadValidatedDouble
+                            ("Введите ускорение:", nonNegative: false);
+                        }), "ускорения"));
+                        ActionMove(actionListAccelerated);
+                        return motionAccelerated;
+                    }
                 case 3:
-                {
-                    OscillatoryMotion motionOscillatory = 
-                        new OscillatoryMotion();
-                    var actionListOscillatory = 
-                        ReadBaseParameters(motionOscillatory);
-                    actionListOscillatory.Add((new Action(() =>
                     {
-                        motionOscillatory.Frequency = 
-                        ReadValidatedDouble("Введите частоту:");
-                    }), "частоты"));
-                    ActionMove(actionListOscillatory);
-                    return motionOscillatory;
-                }
+                        OscillatoryMotion motionOscillatory = 
+                            new OscillatoryMotion();
+                        var actionListOscillatory = 
+                            ReadBaseParameters(motionOscillatory);
+
+                        actionListOscillatory.Add((new Action(() =>
+                        {
+                            motionOscillatory.Frequency = 
+                            ReadValidatedDouble
+                            ("Введите частоту:", nonNegative: true);
+                        }), "частоты"));
+                        ActionMove(actionListOscillatory);
+                        return motionOscillatory;
+                    }
                 default:
                     {
                         return new UniformMotion();
@@ -113,23 +116,23 @@ namespace ConsoleLoader
         {
             var actionList = new List<(Action, string)>
             {
-                //TODO: отступы+
                 (new Action(() =>
                     {
-                        parameters.InitialPosition = ReadValidatedDouble
-                        ("Введите начальную координату:");
-                    }), "начальной координаты"),
-
+                         parameters.InitialPosition = 
+                        ReadValidatedDouble("Введите начальную координату:");
+                     }), "начальной координаты"),
                 (new Action(() =>
                     {
-                        parameters.Time = ReadValidatedDouble
-                        ("Введите время:");
+                        parameters.Time = 
+                        ReadValidatedDouble
+                        ("Введите время:", nonNegative: true);
                     }), "времени"),
 
                 (new Action(() =>
                     {
-                        parameters.Speed = ReadValidatedDouble
-                        ("Введите скорость:");
+                        parameters.Speed = 
+                        ReadValidatedDouble
+                        ("Введите скорость:", nonNegative: true);
                     }), "скорости"),
             };
             return actionList;
@@ -157,18 +160,24 @@ namespace ConsoleLoader
         /// </summary>
         /// <param name="parametr">параметр</param>
         /// <returns>возвращаем параметр или сообщение</returns>
-        public static double ReadValidatedDouble(string parametr)
+        public static double ReadValidatedDouble
+            (string parametr, bool nonNegative = false)
         {
             while (true)
             {
-                Console.WriteLine(parametr);                                
+                Console.WriteLine(parametr);
                 string input = Console.ReadLine();
 
                 if (double.TryParse(input, out double result))
                 {
+                    if (nonNegative && result < 0)
+                    {
+                        Console.WriteLine
+                            ("Значение не может быть отрицательным");
+                        continue;
+                    }
                     return result;
                 }
-
                 Console.WriteLine("Введите корректное число");
             }
         }

@@ -54,13 +54,13 @@
         /// Метод для проверки базовых параметров
         /// </summary>
         /// <param name="value">Значение параметра</param>
-        /// <exception cref="ArgumentException">Значение должно 
+        /// <exception cref="IncorrectArgumentException">Значение должно 
         /// быть конечным числом</exception>
         protected void CheckingForNegative(double value)
         {
-            if (double.IsNaN(value) || double.IsInfinity(value) || value < 0)
+            if (double.IsNaN(value) || double.IsInfinity(value))
             {
-                throw new ArgumentException("Значение должно " +
+                throw new IncorrectArgumentException("Значение должно " +
                     "быть конечным числом");
             }
 
