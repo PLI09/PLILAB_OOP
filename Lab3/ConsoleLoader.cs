@@ -17,21 +17,15 @@ namespace ConsoleLoader
             Console.WriteLine("Расчет координаты для различных видов " +
                 "движения: равномерное, равноускоренное, колебательное");
             MotionBase move = ReadParameters();
+            if (move == null) return;
             Console.WriteLine(move.GetInfo());
             ShowCoordinate(move);
             while (true)
             {
                 Console.WriteLine("Если хотите закончить введите '0'");
-                if (Console.ReadLine() == "0")
-                {
-                    break;
-                }
-                else
-                {
-                    MotionBase moveSecond = ReadParameters();
-                    Console.WriteLine(moveSecond.GetInfo());
-                    ShowCoordinate(moveSecond);
-                }
+                MotionBase moveSecond = ReadParameters();
+                Console.WriteLine(moveSecond.GetInfo());
+                ShowCoordinate(moveSecond);
             }
         }
 
@@ -42,19 +36,19 @@ namespace ConsoleLoader
         public static MotionBase ReadParameters()
         {
             Console.WriteLine("Выберете тип движения:\n1 - Равномерное\n" +
-                "2 - Равноускоренное\n3 - Колебательное\n");
+                "2 - Равноускоренное\n3 - Колебательное\n4 - Выход из программы");
 
             int typeMove;
             while (true)
             {
                 string input = Console.ReadLine();
 
-                if (int.TryParse(input, out typeMove) 
-                    && typeMove >= 1 && typeMove <= 3)
+                if (int.TryParse(input, out typeMove)
+                    && typeMove >= 1 && typeMove <= 4)
                 {
                     break;
                 }
-                Console.WriteLine("Введите число от 1 до 3");
+                Console.WriteLine("Введите число от 1 до 4");
             }
 
             switch (typeMove)
@@ -98,6 +92,10 @@ namespace ConsoleLoader
                     }), "частоты"));
                     ActionMove(actionListOscillatory);
                     return motionOscillatory;
+                }
+                case 4:
+                { 
+                    return null;    
                 }
                 default:
                 {
