@@ -114,7 +114,6 @@ namespace ConsoleLoader
         {
             var actionList = new List<(Action, string)>
             {
-                //TODO: отступы +
                 (
                     new Action(() =>
                     {
