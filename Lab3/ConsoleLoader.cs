@@ -68,41 +68,41 @@ namespace ConsoleLoader
                 }
                 //TODO: отступы+
                 case 2:
-                    {
-                        UniformlyAcceleratedMotion motionAccelerated =
-                            new UniformlyAcceleratedMotion();
-                        var actionListAccelerated =
-                            ReadBaseParameters(motionAccelerated);
+                {
+                    UniformlyAcceleratedMotion motionAccelerated =
+                        new UniformlyAcceleratedMotion();
+                    var actionListAccelerated =
+                        ReadBaseParameters(motionAccelerated);
 
-                        actionListAccelerated.Add((new Action(() =>
-                        {
-                            motionAccelerated.Acceleration = 
-                            ReadValidatedDouble
-                            ("Введите ускорение:", nonNegative: false);
-                        }), "ускорения"));
-                        ActionMove(actionListAccelerated);
-                        return motionAccelerated;
-                    }
+                    actionListAccelerated.Add((new Action(() =>
+                    {
+                        motionAccelerated.Acceleration = 
+                        ReadValidatedDouble
+                        ("Введите ускорение:", nonNegative: false);
+                    }), "ускорения"));
+                    ActionMove(actionListAccelerated);
+                    return motionAccelerated;
+                }
                 case 3:
-                    {
-                        OscillatoryMotion motionOscillatory = 
-                            new OscillatoryMotion();
-                        var actionListOscillatory = 
-                            ReadBaseParameters(motionOscillatory);
+                {
+                    OscillatoryMotion motionOscillatory = 
+                        new OscillatoryMotion();
+                    var actionListOscillatory = 
+                        ReadBaseParameters(motionOscillatory);
 
-                        actionListOscillatory.Add((new Action(() =>
-                        {
-                            motionOscillatory.Frequency = 
-                            ReadValidatedDouble
-                            ("Введите частоту:", nonNegative: true);
-                        }), "частоты"));
-                        ActionMove(actionListOscillatory);
-                        return motionOscillatory;
-                    }
-                default:
+                    actionListOscillatory.Add((new Action(() =>
                     {
-                        return new UniformMotion();
-                    }
+                        motionOscillatory.Frequency = 
+                        ReadValidatedDouble
+                        ("Введите частоту:", nonNegative: true);
+                    }), "частоты"));
+                    ActionMove(actionListOscillatory);
+                    return motionOscillatory;
+                }
+                default:
+                {
+                    return new UniformMotion();
+                }
             }
         }
 
