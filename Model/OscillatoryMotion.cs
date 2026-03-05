@@ -40,8 +40,6 @@
             }
             set
             {
-                //TODO: duplication+
-                //TODO: duplication+
                 CheckingForNegative(value);
                 _frequency = value;
             }

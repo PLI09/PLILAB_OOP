@@ -45,7 +45,6 @@
             }
             set
             {
-                //TODO: duplication+
                 CheckingForNegative(value);
                 _initialPosition = value;
             }
@@ -78,7 +77,6 @@
             }
             set
             {
-                //TODO: duplication+
                 CheckingForNegative(value);
                 _time = value;
             }
@@ -95,8 +93,6 @@
             }
             set
             {
-                //TODO: duplication+
-                //TODO: duplication+
                 CheckingForNegative(value);
                 _speed = value;
             }

@@ -49,7 +49,6 @@ namespace ConsoleLoader
                 try
                 {
                     typeMove = Convert.ToInt32(Console.ReadLine());
-                    //TODO: refactor+
                     if (typeMove < 1 || typeMove > 3)
                     {
                         throw new IncorrectArgumentException
@@ -72,6 +71,7 @@ namespace ConsoleLoader
                     ActionMove(actionList);
                     return motionUniform;
                 }
+                    //TODO: отступы
                 case 2:
                     {
                         UniformlyAcceleratedMotion motionAccelerated = 
@@ -118,6 +118,7 @@ namespace ConsoleLoader
         {
             var actionList = new List<(Action, string)>
             {
+                //TODO: отступы
                 (new Action(() =>
                 {
                     parameters.InitialPosition = ReadValidatedDouble

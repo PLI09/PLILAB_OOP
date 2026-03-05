@@ -5,7 +5,6 @@
     /// </summary>
     public class IncorrectArgumentException : Exception
     {
-        //TODO: XML+
         /// <summary>
         /// Конструктор класса для обработки исключений
         /// </summary>
