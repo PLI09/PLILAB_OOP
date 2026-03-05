@@ -49,6 +49,7 @@ namespace ConsoleLoader
                 try
                 {
                     typeMove = Convert.ToInt32(Console.ReadLine());
+                    //TODO: refactor
                     if (typeMove != 1 && typeMove != 2 && typeMove != 3)
                     {
                         throw new IncorrectArgumentException
@@ -83,6 +84,7 @@ namespace ConsoleLoader
                         ReadBaseParameters(motionAccelerated);
                     actionListAccelerated.Add((new Action(() =>
                     {
+                        //TODO: duplication
                         while (true)
                         {
                             try
@@ -110,6 +112,7 @@ namespace ConsoleLoader
                         ReadBaseParameters(motionOscillatory);
                     actionListOscillatory.Add((new Action(() =>
                     {
+                        //TODO: duplication
                         while (true)
                         {
                             try
@@ -146,6 +149,7 @@ namespace ConsoleLoader
                 (new Action(
                     () =>
                     {
+                        //TODO: duplication
                         while (true)
                         {
                             try
@@ -166,6 +170,7 @@ namespace ConsoleLoader
                 (new Action(
                     () =>
                     {
+                        //TODO: duplication
                         while (true)
                         {
                             try
@@ -186,6 +191,7 @@ namespace ConsoleLoader
                 (new Action(
                     () =>
                     {
+                        //TODO: duplication
                         while (true)
                         {
                             try

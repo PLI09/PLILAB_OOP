@@ -40,11 +40,13 @@
             }
             set
             {
+                //TODO: duplication
                 if (double.IsNaN(value) || double.IsInfinity(value))
                 {
                     throw new IncorrectArgumentException(
                         "Частота должна быть конечным числом");
                 }
+                //TODO: duplication
                 if (value < 0)
                 {
                     throw new IncorrectArgumentException(

@@ -40,6 +40,7 @@
             }
             set
             {
+                //TODO: duplication
                 if (double.IsNaN(value) || double.IsInfinity(value)) 
                 {
                     throw new IncorrectArgumentException(

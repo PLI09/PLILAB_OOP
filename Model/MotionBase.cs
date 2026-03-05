@@ -45,6 +45,7 @@
             }
             set
             {
+                //TODO: duplication
                 if (double.IsNaN(value) || double.IsInfinity(value))
                 {
                     throw new IncorrectArgumentException("Начальная " +
@@ -65,6 +66,7 @@
             }
             set
             {
+                //TODO: duplication
                 if (value < 0) 
                 {
                     throw new IncorrectArgumentException
@@ -85,11 +87,13 @@
             }
             set
             {
+                //TODO: duplication
                 if (double.IsNaN(value) || double.IsInfinity(value))
                 {
                     throw new IncorrectArgumentException
                         ("Скорость должна быть конечным числом");
                 }
+                //TODO: duplication
                 if (value < 0)
                 {
                     throw new IncorrectArgumentException(
