@@ -49,8 +49,8 @@ namespace ConsoleLoader
                 try
                 {
                     typeMove = Convert.ToInt32(Console.ReadLine());
-                    //TODO: refactor
-                    if (typeMove != 1 && typeMove != 2 && typeMove != 3)
+                    //TODO: refactor+
+                    if (typeMove < 1 || typeMove > 3)
                     {
                         throw new IncorrectArgumentException
                             ("Введите число от 1 до 3");
@@ -60,10 +60,6 @@ namespace ConsoleLoader
                 catch (IncorrectArgumentException exception)
                 {
                     Console.WriteLine(exception.Message);
-                }
-                catch (FormatException)
-                {
-                    Console.WriteLine("Введено некорректное значение");
                 }
             }
 
@@ -77,63 +73,39 @@ namespace ConsoleLoader
                     return motionUniform;
                 }
                 case 2:
-                {
-                    UniformlyAcceleratedMotion motionAccelerated = 
-                        new UniformlyAcceleratedMotion();
-                    var actionListAccelerated = 
-                        ReadBaseParameters(motionAccelerated);
-                    actionListAccelerated.Add((new Action(() =>
                     {
-                        //TODO: duplication
-                        while (true)
+                        UniformlyAcceleratedMotion motionAccelerated = 
+                            new UniformlyAcceleratedMotion();
+                        var actionListAccelerated = 
+                            ReadBaseParameters(motionAccelerated);
+
+                        actionListAccelerated.Add((new Action(() =>
                         {
-                            try
-                            {
-                                motionAccelerated.Acceleration =
-                                Convert.ToDouble(Console.ReadLine());
-                                break;
-                            }
-                            catch (FormatException)
-                            {
-                                Console.WriteLine
-                                ("Введено некорректное значение");
-                            }
-                        }
-                    }),
-                    "ускорения"));
-                    ActionMove(actionListAccelerated);
-                    return motionAccelerated;
-                }
+                            motionAccelerated.Acceleration = 
+                            ReadValidatedDouble("Введите ускорение:");
+                        }), "ускорения"));
+                        ActionMove(actionListAccelerated);
+                        return motionAccelerated;
+                    }
                 case 3:
-                {
-                    OscillatoryMotion motionOscillatory = 
-                        new OscillatoryMotion();
-                    var actionListOscillatory = 
-                        ReadBaseParameters(motionOscillatory);
-                    actionListOscillatory.Add((new Action(() =>
                     {
-                        //TODO: duplication
-                        while (true)
+                        OscillatoryMotion motionOscillatory = 
+                            new OscillatoryMotion();
+                        var actionListOscillatory = 
+                            ReadBaseParameters(motionOscillatory);
+                        actionListOscillatory.Add((new Action(() =>
                         {
-                            try
-                            {
-                                motionOscillatory.Frequency =
-                                    Convert.ToDouble(Console.ReadLine());
-                                break;
-                            }
-                            catch (FormatException)
-                            {
-                                Console.WriteLine
-                                ("Введено некорректное значение");
-                            }
-                        }
-                    }),
-                    "частоты"));
-                    ActionMove(actionListOscillatory);
-                    return motionOscillatory;
-                }
+                            motionOscillatory.Frequency = 
+                            ReadValidatedDouble("Введите частоту:");
+                        }), "частоты"));
+                        ActionMove(actionListOscillatory);
+                        return motionOscillatory;
+                    }
+                default:
+                    {
+                        return new UniformMotion();
+                    }
             }
-            return new UniformMotion();
         }
 
         /// <summary>
@@ -142,73 +114,27 @@ namespace ConsoleLoader
         /// <param name="parameters">Параметры движения</param>
         /// <returns>Базовые параметры</returns>
         public static List<(Action, string)> ReadBaseParameters
-            (MotionBase parameters) 
+            (MotionBase parameters)
         {
             var actionList = new List<(Action, string)>
             {
-                (new Action(
-                    () =>
-                    {
-                        //TODO: duplication
-                        while (true)
-                        {
-                            try
-                            {
-                                parameters.InitialPosition = 
-                                Convert.ToDouble(Console.ReadLine());
-                                break;
-                            }
-                            catch (FormatException)
-                            {
-                                Console.WriteLine
-                                ("Введено некорректное значение");
-                            }
-                        }
+                (new Action(() =>
+                {
+                    parameters.InitialPosition = ReadValidatedDouble
+                    ("Введите начальную координату:");
+                }), "начальной координаты"),
 
-                    }),
-                    "начальной координаты"),
-                (new Action(
-                    () =>
-                    {
-                        //TODO: duplication
-                        while (true)
-                        {
-                            try
-                            {
-                                parameters.Time =
-                                Convert.ToDouble(Console.ReadLine());
-                                break;
-                            }
-                            catch (FormatException)
-                            {
-                                Console.WriteLine
-                                ("Введено некорректное значение");
-                            }
-                        }
+                (new Action(() =>
+                {
+                    parameters.Time = ReadValidatedDouble
+                    ("Введите время:");
+                }), "времени"),
 
-                    }),
-                    "времени"),
-                (new Action(
-                    () =>
-                    {
-                        //TODO: duplication
-                        while (true)
-                        {
-                            try
-                            {
-                                parameters.Speed =
-                                Convert.ToDouble(Console.ReadLine());
-                                break;
-                            }
-                            catch (FormatException)
-                            {
-                                Console.WriteLine
-                                ("Введено некорректное значение");
-                            }
-                        }
-
-                    }),
-                    "скорости"),
+                (new Action(() =>
+                {
+                    parameters.Speed = ReadValidatedDouble
+                    ("Введите скорость:");
+                }), "скорости"),
             };
             return actionList;
         }
@@ -221,21 +147,33 @@ namespace ConsoleLoader
         {
             foreach (var action in actionList)
             {
-                Console.WriteLine($"Введите значение {action.Item2}");
+                Console.WriteLine($"Значение {action.Item2}");
                 while (true) 
-                {/*
-                    try
-                    {
-                        action.Item1.Invoke();
-                        break;
-                    }
-                    catch (IncorrectArgumentException exception)
-                    {
-                        Console.WriteLine (exception.Message);
-                    }*/
+                {
                     action.Item1.Invoke();
                     break;
                 }
+            }
+        }
+
+        /// <summary>
+        /// Метод для проверки заполненных данных
+        /// </summary>
+        /// <param name="parametr">параметр</param>
+        /// <returns>возвращаем параметр или сообщение</returns>
+        public static double ReadValidatedDouble(string parametr)
+        {
+            while (true)
+            {
+                Console.WriteLine(parametr);                                
+                string input = Console.ReadLine();
+
+                if (double.TryParse(input, out double result))
+                {
+                    return result;
+                }
+
+                Console.WriteLine("Введите корректное число");
             }
         }
 

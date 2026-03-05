@@ -40,18 +40,9 @@
             }
             set
             {
-                //TODO: duplication
-                if (double.IsNaN(value) || double.IsInfinity(value))
-                {
-                    throw new IncorrectArgumentException(
-                        "Частота должна быть конечным числом");
-                }
-                //TODO: duplication
-                if (value < 0)
-                {
-                    throw new IncorrectArgumentException(
-                        "Частота не может быть отрицательной");
-                }
+                //TODO: duplication+
+                //TODO: duplication+
+                CheckingForNegative(value);
                 _frequency = value;
             }
         }

@@ -45,14 +45,26 @@
             }
             set
             {
-                //TODO: duplication
-                if (double.IsNaN(value) || double.IsInfinity(value))
-                {
-                    throw new IncorrectArgumentException("Начальная " +
-                        "координата должна быть конечным числом");
-                }
+                //TODO: duplication+
+                CheckingForNegative(value);
                 _initialPosition = value;
             }
+        }
+
+        /// <summary>
+        /// Метод для проверки базовых параметров
+        /// </summary>
+        /// <param name="value">Значение параметра</param>
+        /// <exception cref="ArgumentException">Значение должно 
+        /// быть конечным числом</exception>
+        protected void CheckingForNegative(double value)
+        {
+            if (double.IsNaN(value) || double.IsInfinity(value) || value < 0)
+            {
+                throw new ArgumentException("Значение должно " +
+                    "быть конечным числом");
+            }
+
         }
 
         /// <summary>
@@ -66,12 +78,8 @@
             }
             set
             {
-                //TODO: duplication
-                if (value < 0) 
-                {
-                    throw new IncorrectArgumentException
-                        ("Время не может быть отрицательным");
-                }
+                //TODO: duplication+
+                CheckingForNegative(value);
                 _time = value;
             }
         }
@@ -87,18 +95,9 @@
             }
             set
             {
-                //TODO: duplication
-                if (double.IsNaN(value) || double.IsInfinity(value))
-                {
-                    throw new IncorrectArgumentException
-                        ("Скорость должна быть конечным числом");
-                }
-                //TODO: duplication
-                if (value < 0)
-                {
-                    throw new IncorrectArgumentException(
-                        "Скорость не может быть отрицательной");
-                }
+                //TODO: duplication+
+                //TODO: duplication+
+                CheckingForNegative(value);
                 _speed = value;
             }
         }

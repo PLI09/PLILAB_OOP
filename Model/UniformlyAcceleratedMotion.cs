@@ -40,11 +40,10 @@
             }
             set
             {
-                //TODO: duplication
-                if (double.IsNaN(value) || double.IsInfinity(value)) 
+                //TODO: duplication+
+                if (double.IsNaN(value) || double.IsInfinity(value))
                 {
-                    throw new IncorrectArgumentException(
-                        "Ускорение должно быть конечным числом.");
+                    throw new ArgumentException("Значение должно быть конечным числом");
                 }
                 _acceleration = value;
             }

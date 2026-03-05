@@ -5,7 +5,11 @@
     /// </summary>
     public class IncorrectArgumentException : Exception
     {
-        //TODO: XML
+        //TODO: XML+
+        /// <summary>
+        /// Конструктор класса для обработки исключений
+        /// </summary>
+        /// <param name="message">Сообщение об исключении</param>
         public IncorrectArgumentException(string message) : base(message) { }
     }
 }
