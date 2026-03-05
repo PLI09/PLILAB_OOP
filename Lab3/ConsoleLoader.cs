@@ -1,4 +1,5 @@
 ﻿using Model;
+using System;
 
 namespace ConsoleLoader
 {
@@ -46,20 +47,14 @@ namespace ConsoleLoader
             int typeMove;
             while (true)
             {
-                try
+                string input = Console.ReadLine();
+
+                if (int.TryParse(input, out typeMove) 
+                    && typeMove >= 1 && typeMove <= 3)
                 {
-                    typeMove = Convert.ToInt32(Console.ReadLine());
-                    if (typeMove < 1 || typeMove > 3)
-                    {
-                        throw new IncorrectArgumentException
-                            ("Введите число от 1 до 3");
-                    }
                     break;
                 }
-                catch (IncorrectArgumentException exception)
-                {
-                    Console.WriteLine(exception.Message);
-                }
+                Console.WriteLine("Введите число от 1 до 3");
             }
 
             switch (typeMove)
@@ -71,36 +66,36 @@ namespace ConsoleLoader
                     ActionMove(actionList);
                     return motionUniform;
                 }
-                    //TODO: отступы
+                    //TODO: отступы+
                 case 2:
-                    {
-                        UniformlyAcceleratedMotion motionAccelerated = 
-                            new UniformlyAcceleratedMotion();
-                        var actionListAccelerated = 
-                            ReadBaseParameters(motionAccelerated);
+                {
+                    UniformlyAcceleratedMotion motionAccelerated = 
+                        new UniformlyAcceleratedMotion();
+                    var actionListAccelerated = 
+                        ReadBaseParameters(motionAccelerated);
 
-                        actionListAccelerated.Add((new Action(() =>
-                        {
-                            motionAccelerated.Acceleration = 
-                            ReadValidatedDouble("Введите ускорение:");
-                        }), "ускорения"));
-                        ActionMove(actionListAccelerated);
-                        return motionAccelerated;
-                    }
-                case 3:
+                    actionListAccelerated.Add((new Action(() =>
                     {
-                        OscillatoryMotion motionOscillatory = 
-                            new OscillatoryMotion();
-                        var actionListOscillatory = 
-                            ReadBaseParameters(motionOscillatory);
-                        actionListOscillatory.Add((new Action(() =>
-                        {
-                            motionOscillatory.Frequency = 
-                            ReadValidatedDouble("Введите частоту:");
-                        }), "частоты"));
-                        ActionMove(actionListOscillatory);
-                        return motionOscillatory;
-                    }
+                        motionAccelerated.Acceleration = 
+                        ReadValidatedDouble("Введите ускорение:");
+                    }), "ускорения"));
+                    ActionMove(actionListAccelerated);
+                    return motionAccelerated;
+                }
+                case 3:
+                {
+                    OscillatoryMotion motionOscillatory = 
+                        new OscillatoryMotion();
+                    var actionListOscillatory = 
+                        ReadBaseParameters(motionOscillatory);
+                    actionListOscillatory.Add((new Action(() =>
+                    {
+                        motionOscillatory.Frequency = 
+                        ReadValidatedDouble("Введите частоту:");
+                    }), "частоты"));
+                    ActionMove(actionListOscillatory);
+                    return motionOscillatory;
+                }
                 default:
                     {
                         return new UniformMotion();
@@ -118,24 +113,24 @@ namespace ConsoleLoader
         {
             var actionList = new List<(Action, string)>
             {
-                //TODO: отступы
+                //TODO: отступы+
                 (new Action(() =>
-                {
-                    parameters.InitialPosition = ReadValidatedDouble
-                    ("Введите начальную координату:");
-                }), "начальной координаты"),
+                    {
+                        parameters.InitialPosition = ReadValidatedDouble
+                        ("Введите начальную координату:");
+                    }), "начальной координаты"),
 
                 (new Action(() =>
-                {
-                    parameters.Time = ReadValidatedDouble
-                    ("Введите время:");
-                }), "времени"),
+                    {
+                        parameters.Time = ReadValidatedDouble
+                        ("Введите время:");
+                    }), "времени"),
 
                 (new Action(() =>
-                {
-                    parameters.Speed = ReadValidatedDouble
-                    ("Введите скорость:");
-                }), "скорости"),
+                    {
+                        parameters.Speed = ReadValidatedDouble
+                        ("Введите скорость:");
+                    }), "скорости"),
             };
             return actionList;
         }
