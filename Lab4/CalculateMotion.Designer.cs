@@ -81,7 +81,7 @@
             Controls.Add(СalculateButton);
             Controls.Add(TypeMoveComboBox);
             Controls.Add(TypeMoveLabel);
-            ImeMode = ImeMode.NoControl;
+            FormBorderStyle = FormBorderStyle.FixedDialog;
             Name = "CalculateMotion";
             Text = "Расчет координаты";
             ResumeLayout(false);
