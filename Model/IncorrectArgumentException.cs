@@ -1,14 +1,15 @@
 ﻿namespace Model
 {
     /// <summary>
-    /// Класс исключения
+    /// Класс для исключений
     /// </summary>
+    [Serializable]
     public class IncorrectArgumentException : Exception
     {
         /// <summary>
-        /// Конструктор класса для обработки исключений
+        /// Экземпляр класса
         /// </summary>
-        /// <param name="message">Сообщение об исключении</param>
+        /// <param name="message">Сробщение об ошибке</param>
         public IncorrectArgumentException(string message) : base(message) { }
     }
 }

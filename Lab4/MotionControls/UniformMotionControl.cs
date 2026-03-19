@@ -1,30 +1,18 @@
-﻿using Model;
+﻿using System;
+using System.Globalization;
+using Model;
 
 namespace Lab4.MotionControls
 {
     /// <summary>
     /// Форма для равномерного движения
     /// </summary>
-    public partial class UniformMotionControl : UserControl, IMove
+    public partial class UniformMotionControl : UserControl, IMotionInput
     {
-        /// <summary>
-        /// Валидатор для поля начальной координаты
-        /// </summary>
         private ValidateMotionControl valInitial;
-
-        /// <summary>
-        /// Валидатор для поля скорости
-        /// </summary>
         private ValidateMotionControl valSpeed;
-
-        /// <summary>
-        /// Валидатор для поля времени
-        /// </summary>
         private ValidateMotionControl valTime;
 
-        /// <summary>
-        /// Конструктор формы
-        /// </summary>
         public UniformMotionControl()
         {
             InitializeComponent();
@@ -33,41 +21,37 @@ namespace Lab4.MotionControls
             valSpeed = new ValidateMotionControl();
             valTime = new ValidateMotionControl();
 
-            InitialCoordinateTextBoxUM.TextChanged 
-                += valInitial.TextBox_TextChanged;
-            SpeedTextBoxUM.TextChanged 
-                += valSpeed.TextBox_TextChanged;
+            InitialCoordinateTextBoxUM.TextChanged += valInitial.TextBox_TextChanged;
+            SpeedTextBoxUM.TextChanged += valSpeed.TextBox_TextChanged;
             TimeTextBoxUM.TextChanged += valTime.TextBox_TextChanged;
         }
 
         /// <summary>
-        /// Создание экземпляра класса колебательного движения 
+        /// ✅ Реализация метода интерфейса: возвращает объект движения
         /// </summary>
-        public MotionBase MovementParameters
+        public MotionBase GetMotion()  // ← Метод, не свойство!
         {
-            get
-            {
-                double initial = double.Parse
-                    (InitialCoordinateTextBoxUM.Text.Replace(',', '.'),
-                    System.Globalization.CultureInfo.InvariantCulture);
-                double speed = double.Parse
-                    (SpeedTextBoxUM.Text.Replace(',', '.'),
-                    System.Globalization.CultureInfo.InvariantCulture);
-                double time = double.Parse
-                    (TimeTextBoxUM.Text.Replace(',', '.'),
-                    System.Globalization.CultureInfo.InvariantCulture);
+            double initial = ParseDouble(InitialCoordinateTextBoxUM.Text);
+            double speed = ParseDouble(SpeedTextBoxUM.Text);
+            double time = ParseDouble(TimeTextBoxUM.Text);
 
-                return new UniformMotion(speed, initial, time);
-            }
+            return new UniformMotion(speed, initial, time);
         }
 
         /// <summary>
         /// Проверка ввода во всех полях
         /// </summary>
-        /// <returns></returns>
         public bool ValidateInput()
         {
             return valInitial.IsValid && valSpeed.IsValid && valTime.IsValid;
+        }
+
+        /// <summary>
+        /// Вспомогательный метод для парсинга double с заменой запятой
+        /// </summary>
+        private double ParseDouble(string text)
+        {
+            return double.Parse(text.Replace(',', '.'), CultureInfo.InvariantCulture);
         }
     }
 }

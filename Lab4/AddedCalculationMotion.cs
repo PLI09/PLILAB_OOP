@@ -2,22 +2,13 @@
 
 namespace Lab4
 {
-    /// <summary>
-    /// Класс добавления рассчитаной координаты
-    /// </summary>
     public class AddedCalculationMotion : EventArgs
     {
-        /// <summary>
-        /// Параметры движения
-        /// </summary>
-        public MotionBase MovementParameters { get; }
+        public MotionBase Motion { get; }
 
-        /// <summary>
-        /// Добавление рассчитаной координаты
-        /// </summary>
-        public AddedCalculationMotion(MotionBase move)
+        public AddedCalculationMotion(MotionBase motion)
         {
-            MovementParameters = move;
+            Motion = motion ?? throw new ArgumentNullException(nameof(motion));
         }
     }
 }

@@ -45,6 +45,7 @@
             // 
             // TypeMoveComboBox
             // 
+            TypeMoveComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
             TypeMoveComboBox.FormattingEnabled = true;
             TypeMoveComboBox.Location = new Point(178, 35);
             TypeMoveComboBox.Name = "TypeMoveComboBox";
@@ -82,6 +83,7 @@
             Controls.Add(TypeMoveComboBox);
             Controls.Add(TypeMoveLabel);
             FormBorderStyle = FormBorderStyle.FixedDialog;
+            MaximizeBox = false;
             Name = "CalculateMotion";
             Text = "Расчет координаты";
             ResumeLayout(false);

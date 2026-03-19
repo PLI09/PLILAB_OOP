@@ -5,276 +5,375 @@ using Model;
 namespace Lab4
 {
     /// <summary>
-    /// Главная форма
+    /// 
     /// </summary>
     public partial class MainForm : Form
     {
         /// <summary>
-        /// Основной список всех "движений"
+        /// 
         /// </summary>
-        private BindingList<MotionBase> _moveCollection
-            = new BindingList<MotionBase>();
+        private readonly BindingList<MotionBase> _moveCollection = new();
+        /// <summary>
+        /// 
+        /// </summary>
+        private readonly BindingList<MotionBase> _filteredMoveCollection = new();
 
         /// <summary>
-        /// Отфильтрованый список "движений"
+        /// 
         /// </summary>
-        private BindingList<MotionBase> _fileredMoveCollection
-            = new BindingList<MotionBase>();
-
-        /// <summary>
-        /// Названия "Движений"
-        /// </summary>
-        private string[] _moveNames =
+        private readonly string[] _moveNames =
         {
             "Равномерное движение",
             "Равноускоренное движение",
             "Колебательное движение"
         };
 
-        private MotionBase[] _moveTypes = {new UniformMotion(),
-                new UniformlyAcceleratedMotion(), new OscillatoryMotion() };
+        /// <summary>
+        /// 
+        /// </summary>
+        private readonly MotionBase[] _moveTypes =
+        {
+            new UniformMotion(),
+            new UniformlyAcceleratedMotion(),
+            new OscillatoryMotion()
+        };
 
         /// <summary>
-        /// Источник информации для списка рассчитаных координат
+        /// 
         /// </summary>
-        private BindingSource _bindingSource = new BindingSource();
-
-        /// <summary>
-        /// XML-сериализатор для сохранения и загрузки рассчитаных координат
-        /// </summary>
+        private readonly BindingSource _bindingSource = new();
         private readonly XmlSerializer _serializer =
             new XmlSerializer(typeof(BindingList<MotionBase>));
 
         /// <summary>
-        /// Конструктор главной формы
+        /// 
         /// </summary>
         public MainForm()
         {
             InitializeComponent();
-            
-            MoveCheckedListBox.Items.AddRange(_moveNames);
-            for (int i = 0; i < MoveCheckedListBox.Items.Count; i++)
-            {
-                MoveCheckedListBox.SetItemChecked(i, true);
-            }
-            MoveCheckedListBox.ItemCheck +=
-                new ItemCheckEventHandler(MoveCheckedListBox_ItemCheck);
-
-            _bindingSource.DataSource = _fileredMoveCollection;
-            CalculationDataGridView.DataSource = _bindingSource;
-
-            SetupRussianHeaders();
+            InitializeMoveFilter();
+            InitializeDataGrid();
         }
 
         /// <summary>
-        /// Метод для установки русских заголовков колонок
+        /// 
         /// </summary>
-        private void SetupRussianHeaders()
+        private void InitializeMoveFilter()
         {
-            CalculationDataGridView.AutoGenerateColumns = true;
+            MoveCheckedListBox.Items.AddRange(_moveNames);
+            for (int i = 0; i < MoveCheckedListBox.Items.Count; i++)
+                MoveCheckedListBox.SetItemChecked(i, true);
+            MoveCheckedListBox.ItemCheck += MoveCheckedListBox_ItemCheck;
+        }
 
-            var russianHeaders = new Dictionary<string, string>
-            {
-                { "Name", "Название" },
-                { "MotionType", "Тип движения" },
-                { "InitialPosition", "Начальная координата, м" },
-                { "Speed", "Скорость, м/с" },
-                { "Time", "Время, с" },
-                { "Coordinate", "Координата, м" },
-                { "Frequency", "Частота, рад/с" },
-                { "Acceleration", "Ускорение, м/с²" }
-            };
+        /// <summary>
+        /// 
+        /// </summary>
+        private void InitializeDataGrid()
+        {
+            CalculationDataGridView.AutoGenerateColumns = false;
+            CalculationDataGridView.DataSource = _bindingSource;
+            _bindingSource.DataSource = _filteredMoveCollection;
 
-            foreach (DataGridViewColumn column in 
-                CalculationDataGridView.Columns)
+            CreateBaseColumns();
+            SyncExtraColumns();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void MoveCheckedListBox_ItemCheck(object sender, ItemCheckEventArgs e)
+        {
+            BeginInvoke(new Action(() =>
             {
-                if (russianHeaders.ContainsKey(column.DataPropertyName))
+                FilteredDataGrid(e);
+                RefreshExtraColumnValues();
+            }));
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="e"></param>
+        private void FilteredDataGrid(ItemCheckEventArgs e)
+        {
+            _filteredMoveCollection.Clear();
+
+            foreach (var move in _moveCollection)
+            {
+                if (IsMotionVisible(move))
                 {
-                    column.HeaderText = 
-                        russianHeaders[column.DataPropertyName];
+                    _filteredMoveCollection.Add(move);
                 }
             }
         }
 
         /// <summary>
-        /// Обрабока кнопки добавления расчета
+        /// /
         /// </summary>
-        /// <param name="sender">источник события</param>
-        /// <param name="e">данные события</param>
+        /// <param name="move"></param>
+        /// <returns></returns>
+        private bool IsMotionVisible(MotionBase move)
+        {
+            for (int index = 0; index < MoveCheckedListBox.Items.Count; index++)
+            {
+                if (MoveCheckedListBox.GetItemChecked(index) &&
+                    move.GetType() == _moveTypes[index].GetType())
+                    return true;
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        private void RefreshExtraColumnValues()
+        {
+            foreach (DataGridViewRow row in CalculationDataGridView.Rows)
+            {
+                if (row.DataBoundItem is MotionBase motion)
+                {
+                    FillExtraCells(row, motion);
+                }
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="row"></param>
+        /// <param name="motion"></param>
+        private void FillExtraCells(DataGridViewRow row, MotionBase motion)
+        {
+            var extraNames = motion.GetExtraColumnNames().ToList();
+            var extraValues = motion.GetExtraColumnValues().ToList();
+
+            for (int i = 0; i < extraNames.Count && i < extraValues.Count; i++)
+            {
+                var columnName = extraNames[i];
+                if (CalculationDataGridView.Columns.Contains(columnName))
+                {
+                    row.Cells[columnName].Value = extraValues[i];
+                }
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        private void CreateBaseColumns()
+        {
+            var baseColumns = new[]
+            {
+                new { Property = "Name", Header = "Название", Width = 150 },
+                new { Property = "InitialPosition", Header = "Начальная координата, м", Width = 120 },
+                new { Property = "Speed", Header = "Скорость, м/с", Width = 100 },
+                new { Property = "Time", Header = "Время, с", Width = 100 },
+                new { Property = "Coordinate", Header = "Координата, м", Width = 120 }
+            };
+
+            foreach (var col in baseColumns)
+            {
+                var column = new DataGridViewTextBoxColumn
+                {
+                    DataPropertyName = col.Property,
+                    HeaderText = col.Header,
+                    Name = col.Property,
+                    Width = col.Width,
+                    ReadOnly = true
+                };
+                CalculationDataGridView.Columns.Add(column);
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        private void SyncExtraColumns()
+        {
+            var extraColumnNames = _moveCollection
+                .SelectMany(m => m.GetExtraColumnNames())
+                .Distinct()
+                .ToList();
+
+            foreach (var columnName in extraColumnNames)
+            {
+                if (CalculationDataGridView.Columns[columnName] == null)
+                {
+                    var column = new DataGridViewTextBoxColumn
+                    {
+                        Name = columnName,
+                        HeaderText = columnName,
+                        DataPropertyName = string.Empty,
+                        Width = 120,
+                        ReadOnly = true
+                    };
+                    CalculationDataGridView.Columns.Add(column);
+                }
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        private void DefaultFilter()
+        {
+            _filteredMoveCollection.Clear();
+
+            foreach (var move in _moveCollection)
+            {
+                if (IsMotionVisible(move))
+                {
+                    _filteredMoveCollection.Add(move);
+                }
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void AddMovementButton_Click(object sender, EventArgs e)
         {
-            var formAdd = new CalculateMotion();
-            formAdd.MoveAdded = CalculateMotion_MotionAdded;
+            var formAdd = new CalculateMotion { MoveAdded = CalculateMotion_MotionAdded };
             formAdd.ShowDialog();
         }
 
         /// <summary>
-        /// Добавление рассчитанной координаты
+        /// 
         /// </summary>
-        /// <param name="sender">источник события</param>
-        /// <param name="obj">данные события</param>
-        private void CalculateMotion_MotionAdded
-            (object sender, EventArgs obj)
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void CalculateMotion_MotionAdded(object sender, AddedCalculationMotion e)
         {
-            _moveCollection.Add
-                ((obj as AddedCalculationMotion).MovementParameters);
+            _moveCollection.Add(e.Motion);
+            SyncExtraColumns();
             DefaultFilter();
+            RefreshExtraColumnValues();
         }
 
         /// <summary>
-        /// Фильтр таблицы расчетов при изменении выбора движения
+        /// 
         /// </summary>
-        /// <param name="sender">источник события</param>
-        /// <param name="e">состояние галочки</param>
-        private void MoveCheckedListBox_ItemCheck
-            (object sender, ItemCheckEventArgs e)
-        {
-            FilteredDataGrid(e);
-        }
-
-        /// <summary>
-        /// Фильтр таблицы расчетов
-        /// </summary>
-        /// <param name="e">состояние галочки</param>
-        private void FilteredDataGrid(ItemCheckEventArgs e)
-        {
-            _fileredMoveCollection.Clear();
-
-            foreach (MotionBase move in _moveCollection)
-            {
-                AddItemsInFilreredList(e, move);
-            }
-        }
-
-        /// <summary>
-        /// Добавление отфильтрованных данных
-        /// </summary>
-        /// <param name="e">состояние галочки</param>
-        /// <param name="move">тип движения</param>
-        private void AddItemsInFilreredList(ItemCheckEventArgs e,
-                                            MotionBase move)
-        {
-            for (int index = 0; index < MoveCheckedListBox.Items.Count; 
-                index++)
-            {
-                if (MoveCheckedListBox.GetItemChecked(e.Index))
-                {
-                    if (index != e.Index
-                        && move.GetType() == _moveTypes[index].GetType()
-                        && MoveCheckedListBox.GetItemChecked(index))
-                    {
-                        _fileredMoveCollection.Add(move);
-                    }
-                }
-                else
-                {
-                    if (move.GetType() == _moveTypes[e.Index].GetType()
-                            && index == e.Index)
-                    {
-                        _fileredMoveCollection.Add(move);
-                    }
-
-                    if (index != e.Index
-                        && move.GetType() == _moveTypes[index].GetType()
-                        && MoveCheckedListBox.GetItemChecked(index))
-                    {
-                        _fileredMoveCollection.Add(move);
-                    }
-                }
-            }
-        }
-
-        /// <summary>
-        /// Фильтр, при котором не происходит действий с MoveCheckedListBox
-        /// </summary>
-        private void DefaultFilter()
-        {
-            _fileredMoveCollection.Clear();
-
-            foreach (MotionBase move in _moveCollection)
-            {
-                for (int index = 0; index < MoveCheckedListBox.Items.Count; 
-                    index++)
-                {
-                    if (MoveCheckedListBox.GetItemChecked(index)
-                        && move.GetType() == _moveTypes[index].GetType())
-                    {
-                        _fileredMoveCollection.Add(move);
-                    }
-                }
-            }
-        }
-
-        /// <summary>
-        /// Удалить расчет
-        /// </summary>
-        /// <param name="sender">кнопка удалить расчет</param>
-        /// <param name="e">данные о кнопке, которая нажата</param>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void RemoveMovementButton_Click(object sender, EventArgs e)
         {
-            if (CalculationDataGridView.CurrentRow?.DataBoundItem is 
-                MotionBase motion)
+            var selectedRows = CalculationDataGridView.SelectedRows
+               .Cast<DataGridViewRow>()
+               .ToList();
+
+            if (selectedRows.Count == 0 && CalculationDataGridView.CurrentRow != null)
             {
-                _moveCollection.Remove(motion);
-                DefaultFilter();
+                selectedRows.Add(CalculationDataGridView.CurrentRow);
             }
-        }
 
-        /// <summary>
-        /// Открыть файл
-        /// </summary>
-        /// <param name="sender">кнопка открыть</param>
-        /// <param name="e">данные о кнопке, которая нажата</param>
-        private void LoadToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            var openFileDialog = new OpenFileDialog
+            if (selectedRows.Count == 0)
             {
-                Filter = "Файлы (*.elmt)|*.elmt|Все файлы (*.*)|*.*"
-            };
-
-            if (openFileDialog.ShowDialog() != DialogResult.OK)
-            {
+                MessageBox.Show("Выберите строку(и) для удаления.", "Внимание",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            try
-            {
-                using (var stream = new FileStream
-                    (openFileDialog.FileName, FileMode.Open))
-                {
-                    var loadedList = (BindingList<MotionBase>)
-                        _serializer.Deserialize(stream);
+            var motionsToDelete = selectedRows
+                .Select(row => row.DataBoundItem as MotionBase)
+                .Where(m => m != null)
+                .ToList();
 
-                    _moveCollection.Clear();
-                    foreach (var figure in loadedList)
-                    {
-                        _moveCollection.Add(figure);
-                    }
-                    DefaultFilter();
-                    CalculationDataGridView.DataSource = 
-                        _fileredMoveCollection;
-                    MessageBox.Show("Файл успешно загружен.", 
-                        "Загрузка завершена",
-                        MessageBoxButtons.OK, MessageBoxIcon.Information);
-                }
-            }
-            catch (Exception ex)
+            foreach (var motion in motionsToDelete)
             {
-                string exceptionMessage = ex.InnerException == null
-                    ? ex.Message
-                    : ex.InnerException.Message;
-                MessageBox.Show("Ошибка при загрузке файла:\n" + 
-                    exceptionMessage,"Ошибка", MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
+                _moveCollection.Remove(motion);
+            }
+
+            DefaultFilter();
+            RefreshExtraColumnValues();
+            RemoveUnusedExtraColumns();
+
+            if (motionsToDelete.Count > 1)
+            {
+                MessageBox.Show($"Удалено строк: {motionsToDelete.Count}",
+                    "Удаление завершено", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
 
         /// <summary>
-        /// Сохранить файл
+        /// Загрузка списка фигур из файла
         /// </summary>
-        /// <param name="sender">кнопка сохранить как</param>
-        /// <param name="e">данные о кнопке, котора нажата</param>
-        private void SaveToolStripMenuItem_Click(object sender, EventArgs e)
+        private void LoadToolStripMenuItemClick(object sender, EventArgs e)
+        {
+
+            var openFileDialog = new OpenFileDialog
+            {
+                Filter = "Файлы (*.elmt)|*.elmt|Все файлы (*.*)|*.*",
+                Title = "Загрузка данных о движениях"
+            };
+
+            if (openFileDialog.ShowDialog() != DialogResult.OK)
+                return;
+
+            try
+            {
+                using var stream = new FileStream(openFileDialog.FileName, FileMode.Open);
+                var loadedList = (BindingList<MotionBase>)_serializer.Deserialize(stream);
+
+                for (int i = 0; i < loadedList.Count; i++)
+                {
+                    var m = loadedList[i];
+                    if (m.Time < 0 || m.Speed < 0 || m.InitialPosition < 0 ||
+                        (m is OscillatoryMotion osc && osc.Frequency < 0))
+                    {
+                        throw new IncorrectArgumentException(
+                            $"Некорректные данные в файле.\n\n" +
+                            $"Отрицательными параметрами не могут быть:\n" +
+                            $"• Время\n" +
+                            $"• Скорость\n" +
+                            $"• Начальная координата\n" +
+                            $"• Частота (для колебательного движения)");
+                    }
+                }
+
+                _moveCollection.Clear();
+                foreach (var motion in loadedList)
+                    _moveCollection.Add(motion);
+
+                SyncExtraColumns();
+                RemoveUnusedExtraColumns();
+                DefaultFilter();
+                RefreshExtraColumnValues();
+                _bindingSource.ResetBindings(false);
+
+                MessageBox.Show($"Файл успешно загружен.\nЗаписей: {_moveCollection.Count}",
+                    "Загрузка завершена", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (IncorrectArgumentException ex)
+            {
+                MessageBox.Show(ex.Message, "Ошибка в данных",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                _moveCollection.Clear();
+                DefaultFilter();
+                RemoveUnusedExtraColumns();
+                _bindingSource.ResetBindings(false);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка при загрузке файла:\n{ex.Message}",
+                    "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                _moveCollection.Clear();
+                DefaultFilter();
+                RemoveUnusedExtraColumns();
+                _bindingSource.ResetBindings(false);
+            }
+        }
+
+        /// <summary>
+        /// Сохранение списка фигур в файл
+        /// </summary>
+        private void SaveToolStripMenuItemClick(object sender, EventArgs e)
         {
             if (_moveCollection.Count == 0)
             {
@@ -297,23 +396,47 @@ namespace Lab4
 
             try
             {
-                using (var stream = new FileStream(saveFileDialog.FileName, 
-                    FileMode.Create))
+                using (var stream = new FileStream(saveFileDialog.FileName, FileMode.Create))
                 {
                     _serializer.Serialize(stream, _moveCollection);
 
-                    MessageBox.Show("Файл успешно сохранён.", 
-                        "Сохранение завершено",MessageBoxButtons.OK, 
-                        MessageBoxIcon.Information);
+                    MessageBox.Show("Файл успешно сохранён.", "Сохранение завершено",
+                        MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Ошибка при сохранении файла:\n" + 
-                    ex.Message,"Ошибка", MessageBoxButtons.OK, 
-                    MessageBoxIcon.Error);
+                MessageBox.Show("Ошибка при сохранении файла:\n" + ex.Message,
+                    "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
 
+        /// <summary>
+        /// Удаляет дополнительные колонки, которые больше не нужны
+        /// </summary>
+        private void RemoveUnusedExtraColumns()
+        {
+            var requiredExtraColumns = _moveCollection
+                .SelectMany(m => m.GetExtraColumnNames())
+                .Distinct()
+                .ToHashSet();
+
+            var baseColumnNames = new[] { "Name", "InitialPosition", "Speed", "Time", "Coordinate" };
+
+            for (int i = CalculationDataGridView.Columns.Count - 1; i >= 0; i--)
+            {
+                var column = CalculationDataGridView.Columns[i];
+
+                if (baseColumnNames.Contains(column.DataPropertyName))
+                    continue;
+                if (requiredExtraColumns.Contains(column.Name))
+                    continue;
+                CalculationDataGridView.Columns.Remove(column);
+            }
         }
     }
+    
 }
+
+
+

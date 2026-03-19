@@ -1,17 +1,17 @@
 ﻿namespace Model
 {
     /// <summary>
-    /// Класс для равноускоренного дивжения
+    /// Класс для равноускоренного движения
     /// </summary>
     public class UniformlyAcceleratedMotion : MotionBase
     {
         /// <summary>
-        /// Название движения
+        /// Название типа движения
         /// </summary>
-        public override string Name => "Равноускренное движение";
+        public override string Name => "Равноускоренное движение";
 
         /// <summary>
-        /// Рассчитаная координата
+        /// Рассчитанная координата
         /// </summary>
         public override double Coordinate => GetPosition();
 
@@ -28,10 +28,10 @@
         /// <summary>
         /// Конструктор класса
         /// </summary>
-        /// <param name="acceleration"></param>
-        /// <param name="initialPosition"></param>
-        /// <param name="time"></param>
-        /// <param name="speed"></param>
+        /// <param name="acceleration">ускорение</param>
+        /// <param name="initialPosition">начальная координата</param>
+        /// <param name="time">время</param>
+        /// <param name="speed">скорость</param>
         public UniformlyAcceleratedMotion(double acceleration,
             double initialPosition, double time, double speed)
             : base(initialPosition, time, speed)
@@ -40,42 +40,57 @@
         }
 
         /// <summary>
-        /// Свойство для проверки ускорения
+        /// Свойство для ускорения
         /// </summary>
-        public override double Acceleration
+        public double Acceleration
         {
-            get
-            {
-                return _acceleration;
-            }
+            get => _acceleration;
             set
             {
-                if (double.IsNaN(value) || double.IsInfinity(value))
-                {
-                    throw new ArgumentException
+               
+                if ((double.IsNaN(value) || double.IsInfinity(value))) 
+                {                     
+                    throw new IncorrectArgumentException
                         ("Значение должно быть конечным числом");
-                }
+                }                
                 _acceleration = value;
             }
         }
 
         /// <summary>
-        /// Метод для вывода информации о параметрах
+        /// Метод для вывода информации о ускорении
         /// </summary>
-        /// <returns>Информация о параметрах</returns>
+        /// <returns></returns>
         public override string GetInfo()
         {
-            return $"{base.GetInfo()}\nУскорение a={Acceleration} м/с^2";
+            return $"{base.GetInfo()}\nУскорение a={Acceleration} м/с²";
         }
 
         /// <summary>
-        /// Метод для расчета координаты при равноускоренном движении
+        /// Метод расчета координаты в равноускоренном движении
         /// </summary>
-        /// <returns>координата</returns>
+        /// <returns></returns>
         public override double GetPosition()
         {
-            return InitialPosition + Speed * Time +
-                0.5 * Acceleration * Time * Time;
+            return InitialPosition + Speed * Time + 0.5 * Acceleration * Time * Time;
+        }
+
+        /// <summary>
+        /// Метод для возвращения названия колонки "Ускорение"
+        /// </summary>
+        /// <returns></returns>
+        public override IEnumerable<string> GetExtraColumnNames()
+        {
+            yield return "Ускорение (м/с²)";
+        }
+
+        /// <summary>
+        /// Метод для возвращения значения колонки "Ускорение"
+        /// </summary>
+        /// <returns></returns>
+        public override IEnumerable<double> GetExtraColumnValues()
+        {
+            yield return Acceleration;
         }
     }
 }

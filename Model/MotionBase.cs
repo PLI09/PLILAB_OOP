@@ -1,34 +1,25 @@
 ﻿using System.Xml.Serialization;
+
 namespace Model
 {
-    /// <summary>
-    /// Базовый класс
-    /// </summary>
     [XmlInclude(typeof(UniformMotion))]
     [XmlInclude(typeof(UniformlyAcceleratedMotion))]
     [XmlInclude(typeof(OscillatoryMotion))]
+
+    /// <summary>
+    /// Класс с базовыми параметрами движения
+    /// </summary>
     public abstract class MotionBase
-    {
+    { 
         /// <summary>
-        /// Свойство для названия движения
+        /// Тип движения
         /// </summary>
         public virtual string Name => "Тип движения";
-
+        
         /// <summary>
-        /// Свойство для расчитанной координаты
+        /// Рассчитанная координата
         /// </summary>
         public virtual double Coordinate => GetPosition();
-
-        //TODO: refactor
-        /// <summary>
-        /// Ускорение (для равноускоренного движения)
-        /// </summary>
-        public virtual double Acceleration { get; set; } = 0;
-
-        /// <summary>
-        /// Частота (для колебательного движения)
-        /// </summary>
-        public virtual double Frequency { get; set; } = 0;
 
         /// <summary>
         /// Начальная координата
@@ -39,20 +30,19 @@ namespace Model
         /// Время
         /// </summary>
         private double _time;
-
+        
         /// <summary>
-        /// Скорость
+        /// Скорость 
         /// </summary>
         private double _speed;
 
         /// <summary>
-        /// Конструктор класса
+        /// Конструктор базового класса
         /// </summary>
-        /// <param name="initialPosition">начальная координата</param>
-        /// <param name="time">время</param>
-        /// <param name="speed">скорость</param>
-        public MotionBase(double initialPosition,
-            double time, double speed)
+        /// <param name="initialPosition">Начальная координата</param>
+        /// <param name="time">Время</param>
+        /// <param name="speed">Скорость</param>
+        protected MotionBase(double initialPosition, double time, double speed)
         {
             InitialPosition = initialPosition;
             Time = time;
@@ -60,33 +50,20 @@ namespace Model
         }
 
         /// <summary>
-        /// Cвойство для начальной координаты
+        /// Конструктор класса
+        /// </summary>
+        protected MotionBase() { }
+
+        /// <summary>
+        /// Свойство для начальной координаты
         /// </summary>
         public double InitialPosition
         {
-            get
-            {
-                return _initialPosition;
-            }
+            get => _initialPosition;
             set
             {
-                CheckingForNegative(value);
+                 CheckingForNegative(value);
                 _initialPosition = value;
-            }
-        }
-
-        /// <summary>
-        /// Метод для проверки базовых параметров
-        /// </summary>
-        /// <param name="value">Значение параметра</param>
-        /// <exception cref="IncorrectArgumentException">Значение должно 
-        /// быть конечным числом</exception>
-        protected void CheckingForNegative(double value)
-        {
-            if (double.IsNaN(value) || double.IsInfinity(value))
-            {
-                throw new IncorrectArgumentException("Значение должно " +
-                    "быть конечным числом");
             }
         }
 
@@ -95,10 +72,7 @@ namespace Model
         /// </summary>
         public double Time
         {
-            get
-            {
-                return _time;
-            }
+            get => _time;
             set
             {
                 CheckingForNegative(value);
@@ -107,14 +81,11 @@ namespace Model
         }
 
         /// <summary>
-        /// Свойство для проверки скорости
+        /// Свойство для скорости
         /// </summary>
         public double Speed
         {
-            get
-            {
-                return _speed;
-            }
+            get => _speed;
             set
             {
                 CheckingForNegative(value);
@@ -123,9 +94,22 @@ namespace Model
         }
 
         /// <summary>
-        /// Метод для вывода информации о параметрах движения
+        /// Метод для проверки на NaN и Infinity
         /// </summary>
-        /// <returns>Информация о параметрах движения</returns>
+        /// <param name="value"></param>
+        /// <exception cref="IncorrectArgumentException">Значение должно быть
+        /// конечным числом</exception>
+        protected void CheckingForNegative(double value)
+        {
+            if (double.IsNaN(value) || double.IsInfinity(value))
+                throw new IncorrectArgumentException
+                    ("Значение должно быть конечным числом");
+        }
+
+        /// <summary>
+        /// Вывод базовой информации
+        /// </summary>
+        /// <returns></returns>
         public virtual string GetInfo()
         {
             return $"Начальная координата Xo={InitialPosition} м\n" +
@@ -133,9 +117,38 @@ namespace Model
         }
 
         /// <summary>
-        /// Абстрактный метод для расчета координаты движения
+        /// Абстрактный метод для расчета координаты
         /// </summary>
-        /// <returns>Координата движения</returns>
+        /// <returns></returns>
         public abstract double GetPosition();
+
+        /// <summary>
+        /// Возвращает название дополнительных параметров движения
+        /// </summary>
+        /// <returns></returns>
+        public virtual IEnumerable<string> GetExtraColumnNames()
+        {
+            yield break;
+        }
+
+        /// <summary>
+        /// Возвращает значения дополнительных параметров движения
+        /// </summary>
+        /// <returns></returns>
+        public virtual IEnumerable<double> GetExtraColumnValues()
+        {
+            yield break;
+        }
+
+     // public virtual IEnumerable<object> GetTableRowData()
+     // {
+     //     yield return Name;
+     //     yield return Time;
+     //     yield return Coordinate;
+     //     yield return Speed;
+     //
+     //     foreach (var value in GetExtraColumnValues())
+     //         yield return value;
+     // }
     }
 }

@@ -1,7 +1,7 @@
 ﻿namespace Model
 {
     /// <summary>
-    /// Класс для коллебательного движения
+    /// Класс для колебательного движения
     /// </summary>
     public class OscillatoryMotion : MotionBase
     {
@@ -9,9 +9,9 @@
         /// Название движения
         /// </summary>
         public override string Name => "Колебательное движение";
-
+        
         /// <summary>
-        /// Рассчитаная координата
+        /// Расчитанная координата
         /// </summary>
         public override double Coordinate => GetPosition();
 
@@ -40,9 +40,9 @@
         }
 
         /// <summary>
-        /// Cвойство для проверки корректности частоты
+        /// Свойство для частоты
         /// </summary>
-        public override double Frequency
+        public double Frequency
         {
             get => _frequency;
             set
@@ -53,22 +53,39 @@
         }
 
         /// <summary>
-        /// Метод для вывода информации о параметрах движения
+        /// Метод для вывод информации о частоте
         /// </summary>
-        /// <returns>Пареметры движения</returns>
+        /// <returns></returns>
         public override string GetInfo()
         {
-            return $"{base.GetInfo()}\nЧастота w={Frequency} рад/c";
+            return $"{base.GetInfo()}\nЧастота ω={Frequency} рад/с";
         }
 
         /// <summary>
-        /// Метод для расчета координаты для колебательного движения
+        /// Расчет координаты для колебательного движения
         /// </summary>
-        /// <returns>координата для колебательного движения</returns>
+        /// <returns></returns>
         public override double GetPosition()
         {
-            return InitialPosition + (Frequency / Speed) *
-                Math.Sin(Frequency * Time);
+            return InitialPosition + (Frequency / Speed) * Math.Sin(Frequency * Time);
+        }
+
+        /// <summary>
+        /// Метод для возвращения названия колонки "Частота"
+        /// </summary>
+        /// <returns></returns>
+        public override IEnumerable<string> GetExtraColumnNames()
+        {
+            yield return "Частота (Гц)";
+        }
+
+        /// <summary>
+        /// Метод для возвращения значения колонки "Частота"
+        /// </summary>
+        /// <returns></returns>
+        public override IEnumerable<double> GetExtraColumnValues()
+        {
+            yield return Frequency;
         }
     }
 }

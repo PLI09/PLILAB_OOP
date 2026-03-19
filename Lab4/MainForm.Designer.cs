@@ -67,14 +67,14 @@
             LoadToolStripMenuItem.Name = "LoadToolStripMenuItem";
             LoadToolStripMenuItem.Size = new Size(192, 26);
             LoadToolStripMenuItem.Text = "Открыть";
-            LoadToolStripMenuItem.Click += LoadToolStripMenuItem_Click;
+            LoadToolStripMenuItem.Click += LoadToolStripMenuItemClick;
             // 
             // SaveToolStripMenuItem
             // 
             SaveToolStripMenuItem.Name = "SaveToolStripMenuItem";
             SaveToolStripMenuItem.Size = new Size(192, 26);
             SaveToolStripMenuItem.Text = "Сохранить как";
-            SaveToolStripMenuItem.Click += SaveToolStripMenuItem_Click;
+            SaveToolStripMenuItem.Click += SaveToolStripMenuItemClick;
             // 
             // CalculationDataGridView
             // 
@@ -89,7 +89,7 @@
             CalculationDataGridView.RowHeadersVisible = false;
             CalculationDataGridView.RowHeadersWidth = 51;
             CalculationDataGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            CalculationDataGridView.Size = new Size(839, 339);
+            CalculationDataGridView.Size = new Size(831, 339);
             CalculationDataGridView.TabIndex = 1;
             // 
             // AddMovementButton
@@ -132,6 +132,7 @@
             Controls.Add(CalculationDataGridView);
             Controls.Add(toolStrip1);
             FormBorderStyle = FormBorderStyle.FixedDialog;
+            MaximizeBox = false;
             Name = "MainForm";
             Text = "Калькулятор для расчета координаты тела";
             toolStrip1.ResumeLayout(false);
