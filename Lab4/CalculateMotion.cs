@@ -83,6 +83,8 @@ namespace Lab4
         {
             var current = _moveControl;
 
+            //TODO: refactor
+            //TODO: RSDN
             dynamic dyn = current;
             bool isValid = dyn.ValidateInput();
 

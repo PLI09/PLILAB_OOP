@@ -19,6 +19,7 @@ namespace Model
         /// </summary>
         public virtual double Coordinate => GetPosition();
 
+        //TODO: refactor
         /// <summary>
         /// Ускорение (для равноускоренного движения)
         /// </summary>

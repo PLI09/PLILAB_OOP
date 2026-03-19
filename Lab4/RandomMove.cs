@@ -1,6 +1,7 @@
 ﻿using Model;
 namespace Lab4
 {
+    //TODO: refactor
     /// <summary>
     /// Класс генерации рандомного движения
     /// </summary>

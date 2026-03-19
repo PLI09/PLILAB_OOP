@@ -7,6 +7,7 @@ namespace Lab4.MotionControls
     /// </summary>
     public partial class OscillatoryMotionControl : UserControl, IMove
     {
+        //TODO: RSDN
         /// <summary>
         /// Валидатор для поля начальной координаты
         /// </summary>

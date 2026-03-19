@@ -2,6 +2,7 @@
 
 namespace Lab4
 {
+    //TODO: refactor
     /// <summary>
     /// Интерфейс для расчета координаты
     /// </summary>
