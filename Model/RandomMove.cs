@@ -38,28 +38,28 @@
             switch (random.Next(3))
             {
                 case 0:
-                    {
-                        return new UniformMotion
-                            (GenerateRandomValue(),
-                            GenerateRandomValue(),
-                            GenerateRandomValue());
-                    }
+                {
+                    return new UniformMotion
+                        (GenerateRandomValue(),
+                        GenerateRandomValue(),
+                        GenerateRandomValue());
+                }
                 case 1:
-                    {
-                        return new UniformlyAcceleratedMotion
-                            (GenerateRandomValue(),
-                            GenerateRandomValue(),
-                            GenerateRandomValue(),
-                            GenerateRandomValue());
-                    }
+                {
+                    return new UniformlyAcceleratedMotion
+                        (GenerateRandomValue(),
+                        GenerateRandomValue(),
+                        GenerateRandomValue(),
+                        GenerateRandomValue());
+                }
                 case 2:
-                    {
-                        return new OscillatoryMotion
-                            (GenerateRandomValue(),
-                            GenerateRandomValue(),
-                            GenerateRandomValue(),
-                            GenerateRandomValue());
-                    }
+                {
+                    return new OscillatoryMotion
+                        (GenerateRandomValue(),
+                        GenerateRandomValue(),
+                        GenerateRandomValue(),
+                        GenerateRandomValue());
+                }
             }
             return new UniformMotion();
         }

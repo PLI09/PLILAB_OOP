@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
             toolStrip1 = new ToolStrip();
             FileToolStripDropDownButton = new ToolStripDropDownButton();
             LoadToolStripMenuItem = new ToolStripMenuItem();
@@ -48,7 +49,7 @@
             toolStrip1.Items.AddRange(new ToolStripItem[] { FileToolStripDropDownButton });
             toolStrip1.Location = new Point(0, 0);
             toolStrip1.Name = "toolStrip1";
-            toolStrip1.Size = new Size(908, 27);
+            toolStrip1.Size = new Size(859, 27);
             toolStrip1.TabIndex = 0;
             toolStrip1.Text = "toolStrip1";
             // 
@@ -81,7 +82,16 @@
             CalculationDataGridView.AllowUserToAddRows = false;
             CalculationDataGridView.AllowUserToDeleteRows = false;
             CalculationDataGridView.AllowUserToResizeRows = false;
+            CalculationDataGridView.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
             CalculationDataGridView.BackgroundColor = SystemColors.ControlLightLight;
+            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle1.BackColor = SystemColors.Control;
+            dataGridViewCellStyle1.Font = new Font("Segoe UI", 9F);
+            dataGridViewCellStyle1.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
+            CalculationDataGridView.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             CalculationDataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             CalculationDataGridView.Location = new Point(12, 39);
             CalculationDataGridView.Name = "CalculationDataGridView";
@@ -89,12 +99,12 @@
             CalculationDataGridView.RowHeadersVisible = false;
             CalculationDataGridView.RowHeadersWidth = 51;
             CalculationDataGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            CalculationDataGridView.Size = new Size(831, 339);
+            CalculationDataGridView.Size = new Size(833, 339);
             CalculationDataGridView.TabIndex = 1;
             // 
             // AddMovementButton
             // 
-            AddMovementButton.Location = new Point(90, 393);
+            AddMovementButton.Location = new Point(94, 409);
             AddMovementButton.Name = "AddMovementButton";
             AddMovementButton.Size = new Size(153, 29);
             AddMovementButton.TabIndex = 2;
@@ -104,7 +114,7 @@
             // 
             // RemoveMovementButton
             // 
-            RemoveMovementButton.Location = new Point(307, 393);
+            RemoveMovementButton.Location = new Point(315, 409);
             RemoveMovementButton.Name = "RemoveMovementButton";
             RemoveMovementButton.Size = new Size(153, 29);
             RemoveMovementButton.TabIndex = 3;
@@ -115,7 +125,7 @@
             // MoveCheckedListBox
             // 
             MoveCheckedListBox.FormattingEnabled = true;
-            MoveCheckedListBox.Location = new Point(498, 384);
+            MoveCheckedListBox.Location = new Point(556, 392);
             MoveCheckedListBox.Name = "MoveCheckedListBox";
             MoveCheckedListBox.Size = new Size(237, 70);
             MoveCheckedListBox.TabIndex = 4;
@@ -125,7 +135,7 @@
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = SystemColors.GradientActiveCaption;
-            ClientSize = new Size(908, 474);
+            ClientSize = new Size(859, 474);
             Controls.Add(MoveCheckedListBox);
             Controls.Add(RemoveMovementButton);
             Controls.Add(AddMovementButton);

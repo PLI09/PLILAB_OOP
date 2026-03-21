@@ -10,31 +10,16 @@ namespace Model
     /// Класс с базовыми параметрами движения
     /// </summary>
     public abstract class MotionBase
-    { 
+    {
         /// <summary>
         /// Тип движения
         /// </summary>
         public virtual string Name => "Тип движения";
-        
+
         /// <summary>
         /// Рассчитанная координата
         /// </summary>
         public virtual double Coordinate => GetPosition();
-
-        /// <summary>
-        /// Начальная координата
-        /// </summary>
-        private double _initialPosition;
-
-        /// <summary>
-        /// Время
-        /// </summary>
-        private double _time;
-        
-        /// <summary>
-        /// Скорость 
-        /// </summary>
-        private double _speed;
 
         /// <summary>
         /// Конструктор базового класса
@@ -42,7 +27,8 @@ namespace Model
         /// <param name="initialPosition">Начальная координата</param>
         /// <param name="time">Время</param>
         /// <param name="speed">Скорость</param>
-        protected MotionBase(double initialPosition, double time, double speed)
+        protected MotionBase(double initialPosition, 
+            double time, double speed)
         {
             InitialPosition = initialPosition;
             Time = time;
@@ -50,61 +36,19 @@ namespace Model
         }
 
         /// <summary>
-        /// Конструктор класса
-        /// </summary>
-        protected MotionBase() { }
-
-        /// <summary>
         /// Свойство для начальной координаты
         /// </summary>
-        public double InitialPosition
-        {
-            get => _initialPosition;
-            set
-            {
-                 CheckingForNegative(value);
-                _initialPosition = value;
-            }
-        }
+        public double InitialPosition { get; set; }
 
         /// <summary>
         /// Свойство для времени
         /// </summary>
-        public double Time
-        {
-            get => _time;
-            set
-            {
-                CheckingForNegative(value);
-                _time = value;
-            }
-        }
+        public double Time { get; set; }
 
         /// <summary>
         /// Свойство для скорости
         /// </summary>
-        public double Speed
-        {
-            get => _speed;
-            set
-            {
-                CheckingForNegative(value);
-                _speed = value;
-            }
-        }
-
-        /// <summary>
-        /// Метод для проверки на NaN и Infinity
-        /// </summary>
-        /// <param name="value"></param>
-        /// <exception cref="IncorrectArgumentException">Значение должно быть
-        /// конечным числом</exception>
-        protected void CheckingForNegative(double value)
-        {
-            if (double.IsNaN(value) || double.IsInfinity(value))
-                throw new IncorrectArgumentException
-                    ("Значение должно быть конечным числом");
-        }
+        public double Speed { get; set; }
 
         /// <summary>
         /// Вывод базовой информации
@@ -123,32 +67,41 @@ namespace Model
         public abstract double GetPosition();
 
         /// <summary>
-        /// Возвращает название дополнительных параметров движения
+        /// Валидация введенных данных
         /// </summary>
         /// <returns></returns>
-        public virtual IEnumerable<string> GetExtraColumnNames()
+        public virtual string ValidateParameters()
         {
-            yield break;
-        }
+            if (double.IsNaN(InitialPosition) || 
+                double.IsInfinity(InitialPosition))
+            {
+                return $"Начальная координата содержит некорректное" +
+                    $" значение: {InitialPosition}";
+            }
 
-        /// <summary>
-        /// Возвращает значения дополнительных параметров движения
-        /// </summary>
-        /// <returns></returns>
-        public virtual IEnumerable<double> GetExtraColumnValues()
-        {
-            yield break;
-        }
+            if (double.IsNaN(Time) || double.IsInfinity(Time))
+            {
+                return $"Время содержит некорректное значение: {Time}";
+            }
 
-     // public virtual IEnumerable<object> GetTableRowData()
-     // {
-     //     yield return Name;
-     //     yield return Time;
-     //     yield return Coordinate;
-     //     yield return Speed;
-     //
-     //     foreach (var value in GetExtraColumnValues())
-     //         yield return value;
-     // }
+            if (double.IsNaN(Speed) || double.IsInfinity(Speed))
+            {
+                return $"Скорость содержит некорректное значение: {Speed}";
+            }
+
+            if (Time < 0)
+            {
+                return $"Время не может быть отрицательным: {Time}";
+            }
+
+            if (Speed < 0)
+            {
+                return $"Скорость не может быть отрицательной: {Speed}";
+            }
+
+            return string.Empty;
+        }
     }
 }
+
+ 

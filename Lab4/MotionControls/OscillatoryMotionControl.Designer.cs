@@ -41,7 +41,7 @@
             // InitialCoordinateLabelOM
             // 
             InitialCoordinateLabelOM.AutoSize = true;
-            InitialCoordinateLabelOM.Location = new Point(30, 91);
+            InitialCoordinateLabelOM.Location = new Point(30, 58);
             InitialCoordinateLabelOM.Name = "InitialCoordinateLabelOM";
             InitialCoordinateLabelOM.Size = new Size(171, 20);
             InitialCoordinateLabelOM.TabIndex = 0;
@@ -50,7 +50,7 @@
             // TimeLabelOM
             // 
             TimeLabelOM.AutoSize = true;
-            TimeLabelOM.Location = new Point(30, 135);
+            TimeLabelOM.Location = new Point(30, 102);
             TimeLabelOM.Name = "TimeLabelOM";
             TimeLabelOM.Size = new Size(54, 20);
             TimeLabelOM.TabIndex = 1;
@@ -59,7 +59,7 @@
             // SpeedLabelOM
             // 
             SpeedLabelOM.AutoSize = true;
-            SpeedLabelOM.Location = new Point(30, 184);
+            SpeedLabelOM.Location = new Point(30, 151);
             SpeedLabelOM.Name = "SpeedLabelOM";
             SpeedLabelOM.Size = new Size(73, 20);
             SpeedLabelOM.TabIndex = 2;
@@ -68,7 +68,7 @@
             // FrequencyLabelOM
             // 
             FrequencyLabelOM.AutoSize = true;
-            FrequencyLabelOM.Location = new Point(30, 231);
+            FrequencyLabelOM.Location = new Point(30, 198);
             FrequencyLabelOM.Name = "FrequencyLabelOM";
             FrequencyLabelOM.Size = new Size(63, 20);
             FrequencyLabelOM.TabIndex = 3;
@@ -76,28 +76,28 @@
             // 
             // InitialCoordinateTextBoxOM
             // 
-            InitialCoordinateTextBoxOM.Location = new Point(228, 86);
+            InitialCoordinateTextBoxOM.Location = new Point(228, 53);
             InitialCoordinateTextBoxOM.Name = "InitialCoordinateTextBoxOM";
             InitialCoordinateTextBoxOM.Size = new Size(125, 27);
             InitialCoordinateTextBoxOM.TabIndex = 4;
             // 
             // TimeTextBoxOM
             // 
-            TimeTextBoxOM.Location = new Point(228, 132);
+            TimeTextBoxOM.Location = new Point(228, 99);
             TimeTextBoxOM.Name = "TimeTextBoxOM";
             TimeTextBoxOM.Size = new Size(125, 27);
             TimeTextBoxOM.TabIndex = 5;
             // 
             // SpeedTextBoxOM
             // 
-            SpeedTextBoxOM.Location = new Point(228, 181);
+            SpeedTextBoxOM.Location = new Point(228, 148);
             SpeedTextBoxOM.Name = "SpeedTextBoxOM";
             SpeedTextBoxOM.Size = new Size(125, 27);
             SpeedTextBoxOM.TabIndex = 6;
             // 
             // FrequencyTextBoxOM
             // 
-            FrequencyTextBoxOM.Location = new Point(228, 228);
+            FrequencyTextBoxOM.Location = new Point(228, 195);
             FrequencyTextBoxOM.Name = "FrequencyTextBoxOM";
             FrequencyTextBoxOM.Size = new Size(125, 27);
             FrequencyTextBoxOM.TabIndex = 7;

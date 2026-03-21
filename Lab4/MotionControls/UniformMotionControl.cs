@@ -1,57 +1,65 @@
-﻿using System;
-using System.Globalization;
+﻿using System.Globalization;
 using Model;
 
 namespace Lab4.MotionControls
 {
     /// <summary>
-    /// Форма для равномерного движения
+    /// Элемент управления для ввода параметров равномерного движения
     /// </summary>
     public partial class UniformMotionControl : UserControl, IMotionInput
     {
-        private ValidateMotionControl valInitial;
-        private ValidateMotionControl valSpeed;
-        private ValidateMotionControl valTime;
+        /// <summary>
+        /// Валидатор для поля «Начальная координата»
+        /// </summary>
+        private readonly ValidateMotionControl _valInitial = 
+            new() { AllowNegative = true };
 
+        /// <summary>
+        /// Валидатор для поля «Скорость»
+        /// </summary>
+        private readonly ValidateMotionControl _valSpeed = new();
+
+        /// <summary>
+        /// Валидатор для поля «Время»
+        /// </summary>
+        private readonly ValidateMotionControl _valTime = new();
+
+        /// <summary>
+        /// Инициализирует новый экземпляр класса
+        /// </summary>
         public UniformMotionControl()
         {
             InitializeComponent();
-
-            valInitial = new ValidateMotionControl { AllowNegative = true };
-            valSpeed = new ValidateMotionControl();
-            valTime = new ValidateMotionControl();
-
-            InitialCoordinateTextBoxUM.TextChanged += valInitial.TextBox_TextChanged;
-            SpeedTextBoxUM.TextChanged += valSpeed.TextBox_TextChanged;
-            TimeTextBoxUM.TextChanged += valTime.TextBox_TextChanged;
+            InitialCoordinateTextBoxUM.TextChanged += 
+                _valInitial.TextBox_TextChanged;
+            SpeedTextBoxUM.TextChanged += _valSpeed.TextBox_TextChanged;
+            TimeTextBoxUM.TextChanged += _valTime.TextBox_TextChanged;
         }
 
         /// <summary>
-        /// ✅ Реализация метода интерфейса: возвращает объект движения
+        /// Создаёт и возвращает объект с параметрами из полей ввода
         /// </summary>
-        public MotionBase GetMotion()  // ← Метод, не свойство!
-        {
-            double initial = ParseDouble(InitialCoordinateTextBoxUM.Text);
-            double speed = ParseDouble(SpeedTextBoxUM.Text);
-            double time = ParseDouble(TimeTextBoxUM.Text);
-
-            return new UniformMotion(speed, initial, time);
-        }
+        /// <returns></returns>
+        public MotionBase GetMotion() => new UniformMotion(
+            ParseDouble(SpeedTextBoxUM.Text),
+            ParseDouble(InitialCoordinateTextBoxUM.Text),
+            ParseDouble(TimeTextBoxUM.Text));
 
         /// <summary>
-        /// Проверка ввода во всех полях
+        /// Проверяет, прошли ли все поля ввода валидацию
         /// </summary>
-        public bool ValidateInput()
-        {
-            return valInitial.IsValid && valSpeed.IsValid && valTime.IsValid;
-        }
+        /// <returns></returns>
+        public bool ValidateInput() =>
+            _valInitial.IsValid && _valSpeed.IsValid && _valTime.IsValid;
 
         /// <summary>
-        /// Вспомогательный метод для парсинга double с заменой запятой
+        /// Преобразует строку в число типа double с поддержкой различных
+        /// форматов
         /// </summary>
-        private double ParseDouble(string text)
-        {
-            return double.Parse(text.Replace(',', '.'), CultureInfo.InvariantCulture);
-        }
+        /// <param name="text">Строка для преобразования</param>
+        /// <returns>Числовое значение типа double</returns>
+        private double ParseDouble(string text) =>
+            double.Parse(text.Replace(',', '.'), 
+                CultureInfo.InvariantCulture);
     }
 }

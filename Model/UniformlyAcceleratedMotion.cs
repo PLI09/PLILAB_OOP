@@ -16,11 +16,6 @@
         public override double Coordinate => GetPosition();
 
         /// <summary>
-        /// Ускорение
-        /// </summary>
-        private double _acceleration;
-
-        /// <summary>
         /// Конструктор по умолчанию
         /// </summary>
         public UniformlyAcceleratedMotion() : this(1, 1, 1, 1) { }
@@ -42,20 +37,7 @@
         /// <summary>
         /// Свойство для ускорения
         /// </summary>
-        public double Acceleration
-        {
-            get => _acceleration;
-            set
-            {
-               
-                if ((double.IsNaN(value) || double.IsInfinity(value))) 
-                {                     
-                    throw new IncorrectArgumentException
-                        ("Значение должно быть конечным числом");
-                }                
-                _acceleration = value;
-            }
-        }
+        public double Acceleration{ get; set; }
 
         /// <summary>
         /// Метод для вывода информации о ускорении
@@ -72,25 +54,29 @@
         /// <returns></returns>
         public override double GetPosition()
         {
-            return InitialPosition + Speed * Time + 0.5 * Acceleration * Time * Time;
+            return InitialPosition + Speed * Time + 0.5 *
+                Acceleration * Time * Time;
         }
 
         /// <summary>
-        /// Метод для возвращения названия колонки "Ускорение"
+        /// Валидация для равноускоренного движения
         /// </summary>
-        /// <returns></returns>
-        public override IEnumerable<string> GetExtraColumnNames()
+        /// <returns>Сообщение об ошибке</returns>
+        public override string ValidateParameters()
         {
-            yield return "Ускорение (м/с²)";
-        }
+            var baseError = base.ValidateParameters();
+            if (!string.IsNullOrEmpty(baseError))
+            {
+                return baseError;
+            }
+            if (double.IsNaN(Acceleration) || 
+                double.IsInfinity(Acceleration))
+            {
+                return $"Ускорение содержит некорректное значение:" +
+                    $" {Acceleration}";
+            }
 
-        /// <summary>
-        /// Метод для возвращения значения колонки "Ускорение"
-        /// </summary>
-        /// <returns></returns>
-        public override IEnumerable<double> GetExtraColumnValues()
-        {
-            yield return Acceleration;
+            return string.Empty;
         }
     }
 }

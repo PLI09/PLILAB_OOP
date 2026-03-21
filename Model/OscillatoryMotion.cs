@@ -16,11 +16,6 @@
         public override double Coordinate => GetPosition();
 
         /// <summary>
-        /// Частота
-        /// </summary>
-        private double _frequency;
-
-        /// <summary>
         /// Конструктор по умолчанию
         /// </summary>
         public OscillatoryMotion() : this(1, 1, 1, 1) { }
@@ -42,15 +37,7 @@
         /// <summary>
         /// Свойство для частоты
         /// </summary>
-        public double Frequency
-        {
-            get => _frequency;
-            set
-            {
-                CheckingForNegative(value);
-                _frequency = value;
-            }
-        }
+        public double Frequency { get; set; }
 
         /// <summary>
         /// Метод для вывод информации о частоте
@@ -67,25 +54,33 @@
         /// <returns></returns>
         public override double GetPosition()
         {
-            return InitialPosition + (Frequency / Speed) * Math.Sin(Frequency * Time);
+            return InitialPosition + (Frequency / Speed) * 
+                Math.Sin(Frequency * Time);
         }
 
         /// <summary>
-        /// Метод для возвращения названия колонки "Частота"
+        /// Валидация для колебательного движения
         /// </summary>
-        /// <returns></returns>
-        public override IEnumerable<string> GetExtraColumnNames()
+        /// <returns>Сообщение об ошибке</returns>
+        public override string ValidateParameters()
         {
-            yield return "Частота (Гц)";
-        }
+            var baseError = base.ValidateParameters();
+            if (!string.IsNullOrEmpty(baseError))
+            {
+                return baseError;
+            }
 
-        /// <summary>
-        /// Метод для возвращения значения колонки "Частота"
-        /// </summary>
-        /// <returns></returns>
-        public override IEnumerable<double> GetExtraColumnValues()
-        {
-            yield return Frequency;
+            if (double.IsNaN(Frequency) || double.IsInfinity(Frequency)) 
+            {
+                return $"Частота содержит некорректное значение: " +
+                    $"{Frequency}";
+            }
+
+            if (Frequency < 0) 
+            {
+                return $"Частота не может быть отрицательной: {Frequency}";
+            }
+            return string.Empty;
         }
     }
 }

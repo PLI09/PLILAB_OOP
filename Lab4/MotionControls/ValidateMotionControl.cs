@@ -3,46 +3,39 @@
 namespace Lab4.MotionControls
 {
     /// <summary>
-    /// Класс для валидации ввода чисел
+    /// Класс для валидации числовых значений
     /// </summary>
-    public class ValidateMotionControl : UserControl
+    public class ValidateMotionControl
     {
         /// <summary>
-        /// Свойство для разрешения отрицательных значений
+        /// Свойство для разрешения на ввод отрицательных значений
         /// </summary>
-        public bool AllowNegative { get; set; } = false;
+        public bool AllowNegative { get; set; }
 
         /// <summary>
-        /// Свойство для разрешения нуля
+        /// Свойство для разрешения на ввод нулевого значения
         /// </summary>
         public bool AllowZero { get; set; } = true;
 
         /// <summary>
-        /// Минимальное допустимое значение
-        /// </summary>
-        public double? MinValue { get; set; } = null;
-
-        /// <summary>
-        /// Максимальное допустимое значение
-        /// </summary>
-        public double? MaxValue { get; set; } = null;
-
-        /// <summary>
-        /// Событие, возникающее при изменении валидности поля
-        /// </summary>
-        public event EventHandler<bool>? ValidationCompleted;
-
-        /// <summary>
-        /// Последний результат валидации
+        /// Получает текущее состояние валидации последнего проверенного
+        /// значения
         /// </summary>
         public bool IsValid { get; private set; } = true;
 
         /// <summary>
-        /// Обработчик изменения текста в TextBox
+        /// Событие, вызываемое после завершения проверки значения
         /// </summary>
-        public void TextBox_TextChanged(object sender, EventArgs e)
+        public event EventHandler<bool>? ValidationCompleted;
+
+        /// <summary>
+        /// Обработчик события изменения текста
+        /// </summary>
+        /// <param name="sender">Источник события</param>
+        /// <param name="eventArgs">Аргумент</param>
+        public void TextBox_TextChanged(object sender, EventArgs eventArgs)
         {
-            if (!(sender is TextBox textBox))
+            if (sender is not TextBox textBox)
             {
                 return;
             }
@@ -53,46 +46,35 @@ namespace Lab4.MotionControls
             if (!string.IsNullOrEmpty(text))
             {
                 string normalized = text.Replace(',', '.');
-                if (double.TryParse(normalized, NumberStyles.Any, 
+                if (double.TryParse(normalized, NumberStyles.Any,
                     CultureInfo.InvariantCulture, out double value))
                 {
-                    isValid = (AllowNegative || value >= 0) &&
-                        (AllowZero || value != 0) &&
-                        (!MinValue.HasValue || value >= MinValue.Value) &&
-                        (!MaxValue.HasValue || value <= MaxValue.Value);
+                    isValid = (AllowNegative || value >= 0) && 
+                        (AllowZero || value != 0);
                 }
-            }
-
-            if (isValid)
-            {
-                SetValid(textBox);
             }
             else
             {
-                SetInvalid(textBox);
+                isValid = true;
             }
+
+            SetState(textBox, isValid);
         }
 
         /// <summary>
-        /// Устанавливает состояние валидности: белый фон,true, 
-        /// вызывает событие
+        /// Метод для визуального выделения текста с неверными параметрами
         /// </summary>
-        private void SetValid(TextBox textBox)
+        /// <param name="textBox">TextBox, состояние которого 
+        /// нужно обновить</param>
+        /// <param name="isValid">Обновление свойства IsValid</param>
+        private void SetState(TextBox textBox, bool isValid)
         {
-            textBox.BackColor = Color.White;
-            IsValid = true;
-            ValidationCompleted?.Invoke(this, true);
-        }
+            textBox.BackColor = isValid 
+                ? Color.White 
+                : Color.LightCoral;
 
-        /// <summary>
-        /// Устанавливает состояние невалидности: подсветка фона, 
-        /// флаг false,вызывает событие.
-        /// </summary>
-        private void SetInvalid(TextBox textBox)
-        {
-            textBox.BackColor = Color.LightCoral;
-            IsValid = false;
-            ValidationCompleted?.Invoke(this, false);
+            IsValid = isValid;
+            ValidationCompleted?.Invoke(this, isValid);
         }
     }
 }

@@ -29,7 +29,6 @@
         public UniformMotion(double speed, double initialPosition,
             double time) : base(initialPosition, time, speed) { }
 
-
         /// <summary>
         /// Метод для вычисления координаты для равномерного движения
         /// </summary>

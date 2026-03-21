@@ -37,7 +37,7 @@
             // TypeMoveLabel
             // 
             TypeMoveLabel.AutoSize = true;
-            TypeMoveLabel.Location = new Point(38, 38);
+            TypeMoveLabel.Location = new Point(43, 57);
             TypeMoveLabel.Name = "TypeMoveLabel";
             TypeMoveLabel.Size = new Size(109, 20);
             TypeMoveLabel.TabIndex = 0;
@@ -47,7 +47,7 @@
             // 
             TypeMoveComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
             TypeMoveComboBox.FormattingEnabled = true;
-            TypeMoveComboBox.Location = new Point(178, 35);
+            TypeMoveComboBox.Location = new Point(178, 55);
             TypeMoveComboBox.Name = "TypeMoveComboBox";
             TypeMoveComboBox.Size = new Size(247, 28);
             TypeMoveComboBox.TabIndex = 1;
@@ -55,9 +55,9 @@
             // 
             // СalculateButton
             // 
-            СalculateButton.Location = new Point(38, 366);
+            СalculateButton.Location = new Point(29, 355);
             СalculateButton.Name = "СalculateButton";
-            СalculateButton.Size = new Size(178, 29);
+            СalculateButton.Size = new Size(183, 29);
             СalculateButton.TabIndex = 2;
             СalculateButton.Text = "Рассчитать параметры";
             СalculateButton.UseVisualStyleBackColor = true;
@@ -65,7 +65,7 @@
             // 
             // RandomButton
             // 
-            RandomButton.Location = new Point(268, 366);
+            RandomButton.Location = new Point(242, 355);
             RandomButton.Name = "RandomButton";
             RandomButton.Size = new Size(183, 29);
             RandomButton.TabIndex = 3;
@@ -95,6 +95,8 @@
         private Label TypeMoveLabel;
         private ComboBox TypeMoveComboBox;
         private Button СalculateButton;
+#if DEBUG
         private Button RandomButton;
+#endif
     }
 }

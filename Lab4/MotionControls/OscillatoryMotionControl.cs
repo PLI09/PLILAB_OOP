@@ -4,55 +4,73 @@ using Model;
 namespace Lab4.MotionControls
 {
     /// <summary>
-    /// Форма для колебательного движения
+    /// Элемент управления для ввода параметров колебательного движения
     /// </summary>
     public partial class OscillatoryMotionControl : UserControl, IMotionInput
     {
-        private ValidateMotionControl valInitial;
-        private ValidateMotionControl valSpeed;
-        private ValidateMotionControl valTime;
-        private ValidateMotionControl valFrequency;
+        /// <summary>
+        /// Валидатор для поля «Начальная координата»
+        /// </summary>
+        private readonly ValidateMotionControl _valInitial = 
+            new() { AllowNegative = true };
 
+        /// <summary>
+        /// Валидатор для поля «Частота колебаний»
+        /// </summary>
+        private readonly ValidateMotionControl _valFrequency = 
+            new() { AllowZero = false };
+
+        /// <summary>
+        /// Валидатор для поля «Скорость»
+        /// </summary>
+        private readonly ValidateMotionControl _valSpeed = new();
+
+        /// <summary>
+        /// Валидатор для поля «Время»
+        /// </summary>
+        private readonly ValidateMotionControl _valTime = new();
+
+        /// <summary>
+        /// Инициализирует новый экземпляр класса
+        /// </summary>
         public OscillatoryMotionControl()
         {
             InitializeComponent();
-
-            valInitial = new ValidateMotionControl { AllowNegative = true };
-            valFrequency = new ValidateMotionControl { AllowNegative = false, AllowZero = false };
-            valSpeed = new ValidateMotionControl();
-            valTime = new ValidateMotionControl();
-
-            InitialCoordinateTextBoxOM.TextChanged += valInitial.TextBox_TextChanged;
-            SpeedTextBoxOM.TextChanged += valSpeed.TextBox_TextChanged;
-            TimeTextBoxOM.TextChanged += valTime.TextBox_TextChanged;
-            FrequencyTextBoxOM.TextChanged += valFrequency.TextBox_TextChanged;
+            InitialCoordinateTextBoxOM.TextChanged += 
+                _valInitial.TextBox_TextChanged;
+            SpeedTextBoxOM.TextChanged += _valSpeed.TextBox_TextChanged;
+            TimeTextBoxOM.TextChanged += _valTime.TextBox_TextChanged;
+            FrequencyTextBoxOM.TextChanged += 
+                _valFrequency.TextBox_TextChanged;
         }
 
         /// <summary>
-        /// Реализация метода интерфейса: возвращает объект движения
+        /// Создаёт и возвращает объект с параметрами из полей ввода
         /// </summary>
-        public MotionBase GetMotion()
-        {
-            double initial = ParseDouble(InitialCoordinateTextBoxOM.Text);
-            double speed = ParseDouble(SpeedTextBoxOM.Text);
-            double time = ParseDouble(TimeTextBoxOM.Text);
-            double freq = ParseDouble(FrequencyTextBoxOM.Text);
-
-            return new OscillatoryMotion(freq, initial, time, speed);
-        }
+        /// <returns>Новый экземпляр</returns>
+        public MotionBase GetMotion() => new OscillatoryMotion(
+            ParseDouble(FrequencyTextBoxOM.Text),
+            ParseDouble(InitialCoordinateTextBoxOM.Text),
+            ParseDouble(TimeTextBoxOM.Text),
+            ParseDouble(SpeedTextBoxOM.Text));
 
         /// <summary>
-        /// Проверка ввода во всех полях
+        /// Проверяет, прошли ли все поля ввода валидацию
         /// </summary>
-        public bool ValidateInput()
-        {
-            return valInitial.IsValid && valSpeed.IsValid && valTime.IsValid && valFrequency.IsValid;
-        }
+        /// <returns>true, если все четыре валидатора иначе false</returns>
+        public bool ValidateInput() =>
+            _valInitial.IsValid && _valSpeed.IsValid && 
+            _valTime.IsValid && _valFrequency.IsValid;
 
-        private double ParseDouble(string text)
-        {
-            return double.Parse(text.Replace(',', '.'), CultureInfo.InvariantCulture);
-        }
+        /// <summary>
+        /// Преобразует строку в число типа double с поддержкой различных
+        /// форматов
+        /// </summary>
+        /// <param name="text">Строка для преобразования</param>
+        /// <returns>Числовое значение типа double</returns>
+        private double ParseDouble(string text) =>
+            double.Parse(text.Replace(',', '.'), 
+                CultureInfo.InvariantCulture);
     }
 }
 

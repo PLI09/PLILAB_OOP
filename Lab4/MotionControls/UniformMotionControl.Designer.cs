@@ -39,7 +39,7 @@
             // InitialCoordinateLabelUM
             // 
             InitialCoordinateLabelUM.AutoSize = true;
-            InitialCoordinateLabelUM.Location = new Point(30, 91);
+            InitialCoordinateLabelUM.Location = new Point(30, 67);
             InitialCoordinateLabelUM.Name = "InitialCoordinateLabelUM";
             InitialCoordinateLabelUM.Size = new Size(171, 20);
             InitialCoordinateLabelUM.TabIndex = 0;
@@ -48,7 +48,7 @@
             // TimeLabelUM
             // 
             TimeLabelUM.AutoSize = true;
-            TimeLabelUM.Location = new Point(30, 135);
+            TimeLabelUM.Location = new Point(30, 111);
             TimeLabelUM.Name = "TimeLabelUM";
             TimeLabelUM.Size = new Size(54, 20);
             TimeLabelUM.TabIndex = 1;
@@ -57,7 +57,7 @@
             // SpeedLabelUM
             // 
             SpeedLabelUM.AutoSize = true;
-            SpeedLabelUM.Location = new Point(30, 181);
+            SpeedLabelUM.Location = new Point(30, 157);
             SpeedLabelUM.Name = "SpeedLabelUM";
             SpeedLabelUM.Size = new Size(73, 20);
             SpeedLabelUM.TabIndex = 2;
@@ -65,21 +65,21 @@
             // 
             // InitialCoordinateTextBoxUM
             // 
-            InitialCoordinateTextBoxUM.Location = new Point(228, 86);
+            InitialCoordinateTextBoxUM.Location = new Point(228, 62);
             InitialCoordinateTextBoxUM.Name = "InitialCoordinateTextBoxUM";
             InitialCoordinateTextBoxUM.Size = new Size(125, 27);
             InitialCoordinateTextBoxUM.TabIndex = 3;
             // 
             // TimeTextBoxUM
             // 
-            TimeTextBoxUM.Location = new Point(228, 132);
+            TimeTextBoxUM.Location = new Point(228, 108);
             TimeTextBoxUM.Name = "TimeTextBoxUM";
             TimeTextBoxUM.Size = new Size(125, 27);
             TimeTextBoxUM.TabIndex = 4;
             // 
             // SpeedTextBoxUM
             // 
-            SpeedTextBoxUM.Location = new Point(228, 181);
+            SpeedTextBoxUM.Location = new Point(228, 157);
             SpeedTextBoxUM.Name = "SpeedTextBoxUM";
             SpeedTextBoxUM.Size = new Size(125, 27);
             SpeedTextBoxUM.TabIndex = 5;

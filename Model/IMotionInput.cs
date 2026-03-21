@@ -1,10 +1,7 @@
-﻿using Model;
-
-namespace Lab4.MotionControls
+﻿namespace Model
 {
-    //TODO: refactor +
     /// <summary>
-    /// Интерфейс для расчета координаты
+    /// Интерфейс для элементов управления вводом параметров движения
     /// </summary>
     public interface IMotionInput
     {

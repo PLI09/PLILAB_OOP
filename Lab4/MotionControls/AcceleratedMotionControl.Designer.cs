@@ -41,7 +41,7 @@
             // InitialCoordinateLabelAM
             // 
             InitialCoordinateLabelAM.AutoSize = true;
-            InitialCoordinateLabelAM.Location = new Point(30, 91);
+            InitialCoordinateLabelAM.Location = new Point(30, 58);
             InitialCoordinateLabelAM.Name = "InitialCoordinateLabelAM";
             InitialCoordinateLabelAM.Size = new Size(171, 20);
             InitialCoordinateLabelAM.TabIndex = 0;
@@ -50,7 +50,7 @@
             // SpeedLabelAM
             // 
             SpeedLabelAM.AutoSize = true;
-            SpeedLabelAM.Location = new Point(30, 181);
+            SpeedLabelAM.Location = new Point(30, 148);
             SpeedLabelAM.Name = "SpeedLabelAM";
             SpeedLabelAM.Size = new Size(73, 20);
             SpeedLabelAM.TabIndex = 1;
@@ -59,7 +59,7 @@
             // TimeLabelAM
             // 
             TimeLabelAM.AutoSize = true;
-            TimeLabelAM.Location = new Point(30, 132);
+            TimeLabelAM.Location = new Point(30, 99);
             TimeLabelAM.Name = "TimeLabelAM";
             TimeLabelAM.Size = new Size(54, 20);
             TimeLabelAM.TabIndex = 2;
@@ -67,21 +67,21 @@
             // 
             // InitialCoordinateTextBoxAM
             // 
-            InitialCoordinateTextBoxAM.Location = new Point(228, 86);
+            InitialCoordinateTextBoxAM.Location = new Point(228, 53);
             InitialCoordinateTextBoxAM.Name = "InitialCoordinateTextBoxAM";
             InitialCoordinateTextBoxAM.Size = new Size(125, 27);
             InitialCoordinateTextBoxAM.TabIndex = 3;
             // 
             // TimeTextBoxAM
             // 
-            TimeTextBoxAM.Location = new Point(228, 132);
+            TimeTextBoxAM.Location = new Point(228, 99);
             TimeTextBoxAM.Name = "TimeTextBoxAM";
             TimeTextBoxAM.Size = new Size(125, 27);
             TimeTextBoxAM.TabIndex = 4;
             // 
             // SpeedTextBoxAM
             // 
-            SpeedTextBoxAM.Location = new Point(228, 181);
+            SpeedTextBoxAM.Location = new Point(228, 148);
             SpeedTextBoxAM.Name = "SpeedTextBoxAM";
             SpeedTextBoxAM.Size = new Size(125, 27);
             SpeedTextBoxAM.TabIndex = 5;
@@ -89,7 +89,7 @@
             // AccelerateLabelAM
             // 
             AccelerateLabelAM.AutoSize = true;
-            AccelerateLabelAM.Location = new Point(30, 231);
+            AccelerateLabelAM.Location = new Point(30, 198);
             AccelerateLabelAM.Name = "AccelerateLabelAM";
             AccelerateLabelAM.Size = new Size(84, 20);
             AccelerateLabelAM.TabIndex = 6;
@@ -97,7 +97,7 @@
             // 
             // AccelerateTextBoxAM
             // 
-            AccelerateTextBoxAM.Location = new Point(228, 228);
+            AccelerateTextBoxAM.Location = new Point(228, 195);
             AccelerateTextBoxAM.Name = "AccelerateTextBoxAM";
             AccelerateTextBoxAM.Size = new Size(125, 27);
             AccelerateTextBoxAM.TabIndex = 7;
