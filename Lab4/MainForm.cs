@@ -205,6 +205,7 @@ namespace Lab4
             _filteredMoveCollection.Clear();
             foreach (var move in _moveCollection)
             {
+                //TODO: {}
                 if (IsMotionVisible(move))
                     _filteredMoveCollection.Add(move);
             }
@@ -417,8 +418,9 @@ namespace Lab4
                         $"Обнаружено некорректных записей: {errors.Count} " +
                         $"из {loadedList.Count}\n\n" +
                         string.Join("\n\n", errors.Take(errors.Count)) +
-                        (errors.Count > 5 ? $"\n\n... и ещё " +
-                        $"{errors.Count}" : "") +
+                        (errors.Count > 5 
+                            ? $"\n\n... и ещё {errors.Count}" 
+                            : "") +
                         $"\n\nЗагрузить только корректные данные " +
                         $"({validMotions.Count} записей)?",
                         "Ошибка валидации данных",

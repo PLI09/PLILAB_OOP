@@ -135,8 +135,10 @@ namespace Lab4
         /// <returns>true, если все значения валидны или поля пусты;
         /// false, если найдено значение с недопустимым ведущим нулём
         /// </returns>
+        /// //TODO: refactor
         private bool ValidateNoLeadingZeros(Control control)
         {
+            //TODO: RSDN
             foreach (Control ctrl in control.Controls)
             {
                 if (ctrl is TextBox textBox)

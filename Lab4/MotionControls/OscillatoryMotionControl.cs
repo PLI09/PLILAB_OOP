@@ -8,23 +8,27 @@ namespace Lab4.MotionControls
     /// </summary>
     public partial class OscillatoryMotionControl : UserControl, IMotionInput
     {
+        //TODO: RSDN
         /// <summary>
         /// Валидатор для поля «Начальная координата»
         /// </summary>
         private readonly ValidateMotionControl _valInitial = 
             new() { AllowNegative = true };
 
+        //TODO: RSDN
         /// <summary>
         /// Валидатор для поля «Частота колебаний»
         /// </summary>
         private readonly ValidateMotionControl _valFrequency = 
             new() { AllowZero = false };
 
+        //TODO: RSDN
         /// <summary>
         /// Валидатор для поля «Скорость»
         /// </summary>
         private readonly ValidateMotionControl _valSpeed = new();
 
+        //TODO: RSDN
         /// <summary>
         /// Валидатор для поля «Время»
         /// </summary>

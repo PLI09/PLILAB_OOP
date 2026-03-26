@@ -1,6 +1,5 @@
 ﻿namespace Model
 {
-    //TODO: refactor+
     /// <summary>
     /// Класс генерации рандомного движения
     /// </summary>
