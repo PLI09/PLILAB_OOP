@@ -2,11 +2,11 @@
 
 namespace Lab4.MotionControls
 {
-    //TODO: rename
+    //TODO: rename+
     /// <summary>
     /// Класс для валидации числовых значений
     /// </summary>
-    public class ValidateMotionControl
+    public class ValidateMotion
     {
         /// <summary>
         /// Свойство для разрешения на ввод отрицательных значений

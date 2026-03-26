@@ -109,7 +109,8 @@ namespace Lab4
                 ReadOnly = true,
                 DefaultCellStyle = 
                 { 
-                    WrapMode = DataGridViewTriState.True 
+                    WrapMode = DataGridViewTriState.True,
+                    Alignment = DataGridViewContentAlignment.MiddleCenter
                 }
             };
             CalculationDataGridView.Columns.Add(nameColumn);
@@ -121,9 +122,10 @@ namespace Lab4
                 Name = "Parameters",
                 Width = 350,
                 ReadOnly = true,
-                DefaultCellStyle = 
-                { 
-                    WrapMode = DataGridViewTriState.True 
+                DefaultCellStyle =
+                {
+                    WrapMode = DataGridViewTriState.True,
+                    Alignment = DataGridViewContentAlignment.MiddleCenter
                 }
             };
             CalculationDataGridView.Columns.Add(paramsColumn);
@@ -136,8 +138,8 @@ namespace Lab4
                 Width = 300,
                 ReadOnly = true,
                 DefaultCellStyle = 
-                { 
-                    Alignment = DataGridViewContentAlignment.MiddleRight 
+                {
+                    Alignment = DataGridViewContentAlignment.MiddleCenter
                 }
             };
             CalculationDataGridView.Columns.Add(coordColumn);
@@ -205,9 +207,11 @@ namespace Lab4
             _filteredMoveCollection.Clear();
             foreach (var move in _moveCollection)
             {
-                //TODO: {}
+                //TODO: {} +
                 if (IsMotionVisible(move))
+                {
                     _filteredMoveCollection.Add(move);
+                }
             }
         }
 
@@ -437,11 +441,30 @@ namespace Lab4
                     if (result == DialogResult.No)
                     {
                         validMotions = loadedList.ToList();
-                    }                
+                        MessageBox.Show(
+                        $"Файл загружен.\nУспешно: {validMotions.Count}\n",
+                        "Загрузка завершена",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Information);
+                    }
+                    else
+                    {
+                        MessageBox.Show(
+                        $"Файл загружен.\nУспешно: " +
+                        $"{validMotions.Count}\nОтклонено: {errors.Count}",
+                        "Загрузка завершена",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Information);
+                    }
                 }
                 else
                 {
                     validMotions = loadedList.ToList();
+                    MessageBox.Show(
+                    $"Файл загружен.\nУспешно: {validMotions.Count}\n",
+                    "Загрузка завершена",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
                 }
 
                 _moveCollection.Clear();
@@ -452,20 +475,12 @@ namespace Lab4
 
                 ApplyFilter();
                 RefreshGridData();
-
-                MessageBox.Show(
-                    $"Файл загружен.\nУспешно: " +
-                    $"{validMotions.Count}\nОтклонено: {errors.Count}",
-                    "Загрузка завершена",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Information);
             }
             catch (IncorrectArgumentException exception)
             {
                 MessageBox.Show($"Ошибка в данных: {exception.Message}",
                     "Ошибка валидации", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
-                _moveCollection.Clear();
                 ApplyFilter();
                 RefreshGridData();
             }
@@ -475,7 +490,6 @@ namespace Lab4
                     $"\n{exception.Message}", 
                     "Ошибка", MessageBoxButtons.OK, 
                     MessageBoxIcon.Error);
-                _moveCollection.Clear();
                 ApplyFilter();
                 RefreshGridData();
             }

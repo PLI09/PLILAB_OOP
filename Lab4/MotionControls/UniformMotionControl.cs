@@ -8,24 +8,24 @@ namespace Lab4.MotionControls
     /// </summary>
     public partial class UniformMotionControl : UserControl, IMotionInput
     {
-        //TODO: RSDN
+        //TODO: RSDN+
         /// <summary>
         /// Валидатор для поля «Начальная координата»
         /// </summary>
-        private readonly ValidateMotionControl _valInitial = 
+        private readonly ValidateMotion _validateInitial = 
             new() { AllowNegative = true };
 
-        //TODO: RSDN
+        //TODO: RSDN+
         /// <summary>
         /// Валидатор для поля «Скорость»
         /// </summary>
-        private readonly ValidateMotionControl _valSpeed = new();
+        private readonly ValidateMotion _validateSpeed = new();
 
-        //TODO: RSDN
+        //TODO: RSDN+
         /// <summary>
         /// Валидатор для поля «Время»
         /// </summary>
-        private readonly ValidateMotionControl _valTime = new();
+        private readonly ValidateMotion _validateTime = new();
 
         /// <summary>
         /// Инициализирует новый экземпляр класса
@@ -34,9 +34,9 @@ namespace Lab4.MotionControls
         {
             InitializeComponent();
             InitialCoordinateTextBoxUM.TextChanged += 
-                _valInitial.TextBox_TextChanged;
-            SpeedTextBoxUM.TextChanged += _valSpeed.TextBox_TextChanged;
-            TimeTextBoxUM.TextChanged += _valTime.TextBox_TextChanged;
+                _validateInitial.TextBox_TextChanged;
+            SpeedTextBoxUM.TextChanged += _validateSpeed.TextBox_TextChanged;
+            TimeTextBoxUM.TextChanged += _validateTime.TextBox_TextChanged;
         }
 
         /// <summary>
@@ -53,7 +53,8 @@ namespace Lab4.MotionControls
         /// </summary>
         /// <returns></returns>
         public bool ValidateInput() =>
-            _valInitial.IsValid && _valSpeed.IsValid && _valTime.IsValid;
+            _validateInitial.IsValid && _validateSpeed.IsValid 
+            && _validateTime.IsValid;
 
         /// <summary>
         /// Преобразует строку в число типа double с поддержкой различных

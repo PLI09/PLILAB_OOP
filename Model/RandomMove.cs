@@ -13,7 +13,7 @@
         /// <summary>
         /// Максимальное число для генерации
         /// </summary>
-        private const double _maxRandomValue = 1000000000.0;
+        private const double _maxRandomValue = 1000.0;
 
         /// <summary>
         /// Генерация рандомного параметра

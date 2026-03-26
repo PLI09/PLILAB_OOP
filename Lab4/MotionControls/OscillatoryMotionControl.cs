@@ -8,31 +8,31 @@ namespace Lab4.MotionControls
     /// </summary>
     public partial class OscillatoryMotionControl : UserControl, IMotionInput
     {
-        //TODO: RSDN
+        //TODO: RSDN+
         /// <summary>
         /// Валидатор для поля «Начальная координата»
         /// </summary>
-        private readonly ValidateMotionControl _valInitial = 
+        private readonly ValidateMotion _validateInitial = 
             new() { AllowNegative = true };
 
-        //TODO: RSDN
+        //TODO: RSDN+
         /// <summary>
         /// Валидатор для поля «Частота колебаний»
         /// </summary>
-        private readonly ValidateMotionControl _valFrequency = 
+        private readonly ValidateMotion _validateFrequency = 
             new() { AllowZero = false };
 
-        //TODO: RSDN
+        //TODO: RSDN+
         /// <summary>
         /// Валидатор для поля «Скорость»
         /// </summary>
-        private readonly ValidateMotionControl _valSpeed = new();
+        private readonly ValidateMotion _validateSpeed = new();
 
-        //TODO: RSDN
+        //TODO: RSDN+
         /// <summary>
         /// Валидатор для поля «Время»
         /// </summary>
-        private readonly ValidateMotionControl _valTime = new();
+        private readonly ValidateMotion _validateTime = new();
 
         /// <summary>
         /// Инициализирует новый экземпляр класса
@@ -41,11 +41,11 @@ namespace Lab4.MotionControls
         {
             InitializeComponent();
             InitialCoordinateTextBoxOM.TextChanged += 
-                _valInitial.TextBox_TextChanged;
-            SpeedTextBoxOM.TextChanged += _valSpeed.TextBox_TextChanged;
-            TimeTextBoxOM.TextChanged += _valTime.TextBox_TextChanged;
+                _validateInitial.TextBox_TextChanged;
+            SpeedTextBoxOM.TextChanged += _validateSpeed.TextBox_TextChanged;
+            TimeTextBoxOM.TextChanged += _validateTime.TextBox_TextChanged;
             FrequencyTextBoxOM.TextChanged += 
-                _valFrequency.TextBox_TextChanged;
+                _validateFrequency.TextBox_TextChanged;
         }
 
         /// <summary>
@@ -63,8 +63,8 @@ namespace Lab4.MotionControls
         /// </summary>
         /// <returns>true, если все четыре валидатора иначе false</returns>
         public bool ValidateInput() =>
-            _valInitial.IsValid && _valSpeed.IsValid && 
-            _valTime.IsValid && _valFrequency.IsValid;
+            _validateInitial.IsValid && _validateSpeed.IsValid && 
+            _validateTime.IsValid && _validateFrequency.IsValid;
 
         /// <summary>
         /// Преобразует строку в число типа double с поддержкой различных

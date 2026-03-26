@@ -131,34 +131,24 @@ namespace Lab4
         /// <summary>
         /// Проверка на правильность веденных значений, начинающихся с 0 
         /// </summary>
-        /// <param name="control">UserControl</param>
+        /// <param name="controlInput">UserControl</param>
         /// <returns>true, если все значения валидны или поля пусты;
         /// false, если найдено значение с недопустимым ведущим нулём
         /// </returns>
-        /// //TODO: refactor
-        private bool ValidateNoLeadingZeros(Control control)
+        /// //TODO: refactor +
+        private bool ValidateNoLeadingZeros(UserControl controlInput)
         {
-            //TODO: RSDN
-            foreach (Control ctrl in control.Controls)
+            //TODO: RSDN +
+            foreach (Control control in controlInput.Controls)
             {
-                if (ctrl is TextBox textBox)
+                if (control is TextBox textBox)
                 {
                     string text = textBox.Text.Trim();
-                    if (string.IsNullOrEmpty(text))
-                    {
-                        continue;
-                    }
-
-                    if (HasInvalidLeadingZero(text))
+                    if (!string.IsNullOrEmpty(text) && HasInvalidLeadingZero(text))
                     {
                         textBox.Focus();
                         return false;
                     }
-                }
-
-                if (!ValidateNoLeadingZeros(ctrl))
-                {
-                    return false;
                 }
             }
             return true;
