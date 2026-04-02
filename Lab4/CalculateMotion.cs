@@ -9,7 +9,7 @@ namespace Lab4
     public partial class CalculateMotion : Form
     {
         /// <summary>
-        /// Событие, вызываемое после успешного добавления нового движения
+        /// Событие вызываемое после успешного добавления нового движения
         /// </summary>
         public EventHandler<AddedCalculationMotion> MoveAdded;
 
