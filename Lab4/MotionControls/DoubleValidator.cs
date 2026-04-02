@@ -6,7 +6,7 @@ namespace Lab4.MotionControls
     /// <summary>
     /// Класс для валидации числовых значений
     /// </summary>
-    public class ValidateMotion
+    public class DoubleValidator
     {
         /// <summary>
         /// Свойство для разрешения на ввод отрицательных значений

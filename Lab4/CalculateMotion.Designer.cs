@@ -31,7 +31,9 @@
             TypeMoveLabel = new Label();
             TypeMoveComboBox = new ComboBox();
             СalculateButton = new Button();
+#if DEBUG
             RandomButton = new Button();
+#endif
             SuspendLayout();
             // 
             // TypeMoveLabel
@@ -65,6 +67,7 @@
             // 
             // RandomButton
             // 
+#if DEBUG
             RandomButton.Location = new Point(242, 355);
             RandomButton.Name = "RandomButton";
             RandomButton.Size = new Size(183, 29);
@@ -72,13 +75,16 @@
             RandomButton.Text = "Рандомные параметры";
             RandomButton.UseVisualStyleBackColor = true;
             RandomButton.Click += RandomButton_Click;
+#endif
             // 
             // CalculateMotion
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(463, 420);
+#if DEBUG
             Controls.Add(RandomButton);
+#endif
             Controls.Add(СalculateButton);
             Controls.Add(TypeMoveComboBox);
             Controls.Add(TypeMoveLabel);
@@ -90,7 +96,7 @@
             PerformLayout();
         }
 
-        #endregion
+#endregion
 
         private Label TypeMoveLabel;
         private ComboBox TypeMoveComboBox;
