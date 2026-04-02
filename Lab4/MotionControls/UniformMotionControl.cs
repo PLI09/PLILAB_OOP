@@ -8,20 +8,17 @@ namespace Lab4.MotionControls
     /// </summary>
     public partial class UniformMotionControl : UserControl, IMotionInput
     {
-        //TODO: RSDN+
         /// <summary>
         /// Валидатор для поля «Начальная координата»
         /// </summary>
         private readonly ValidateMotion _validateInitial = 
             new() { AllowNegative = true };
 
-        //TODO: RSDN+
         /// <summary>
         /// Валидатор для поля «Скорость»
         /// </summary>
         private readonly ValidateMotion _validateSpeed = new();
 
-        //TODO: RSDN+
         /// <summary>
         /// Валидатор для поля «Время»
         /// </summary>
