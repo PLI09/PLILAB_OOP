@@ -207,7 +207,6 @@ namespace Lab4
             _filteredMoveCollection.Clear();
             foreach (var move in _moveCollection)
             {
-                //TODO: {} +
                 if (IsMotionVisible(move))
                 {
                     _filteredMoveCollection.Add(move);

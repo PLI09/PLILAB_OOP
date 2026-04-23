@@ -2,7 +2,6 @@
 
 namespace Lab4.MotionControls
 {
-    //TODO: rename
     /// <summary>
     /// Класс для валидации числовых значений
     /// </summary>
