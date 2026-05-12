@@ -1,4 +1,6 @@
-﻿namespace Model
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace Model
 {
     /// <summary>
     /// Класс генерации рандомного движения
@@ -31,6 +33,7 @@
         /// Генерация рандомного движения
         /// </summary>
         /// <returns>Движение</returns>
+        [ExcludeFromCodeCoverage]
         public static MotionBase GetRandomMove()
         {
             Random random = new Random();
