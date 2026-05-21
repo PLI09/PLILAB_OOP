@@ -248,8 +248,5 @@ public class OscillatoryMotionTests
         var motion = new OscillatoryMotion(25, 100, 5, 8);
         
         Assert.That(motion.Frequency, Is.EqualTo(25));
-        Assert.That(motion.InitialPosition, Is.EqualTo(100));
-        Assert.That(motion.Time, Is.EqualTo(5));
-        Assert.That(motion.Speed, Is.EqualTo(8));
     }
 }

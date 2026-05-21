@@ -30,6 +30,33 @@ public class MotionBaseTests
             InitialPosition + Speed * Time;
     }
 
+    private static class MotionFactory
+    {
+        public static MotionBase GetMotion(int motionNumber, 
+            double initialPosition, 
+            double time, 
+            double speed, 
+            double value = 1)
+        {
+            switch (motionNumber)
+            {
+                case 0:
+                {
+                    return new OscillatoryMotion(value, initialPosition, time, speed);
+                }
+                case 1:
+                {
+                    return new UniformlyAcceleratedMotion(value, initialPosition, time, speed);
+                }
+                case 2:
+                default:
+                {
+                    return new UniformMotion(initialPosition, time, speed);
+                }
+            }
+        }
+    }
+
     /// <summary>
     /// Проверка свойства Name по умолчанию
     /// </summary>
@@ -169,5 +196,29 @@ public class MotionBaseTests
             typeof(UniformlyAcceleratedMotion)));
         Assert.That(types, Does.Contain(
             typeof(OscillatoryMotion)));
+    }
+
+
+    /// <summary>
+    /// Проверка конструктора с параметрами при присваиваении значений
+    /// </summary>
+    [TestCase(0, TestName = "Проверка конструктора OscillatoryMotion с параметрами при" +
+        " присваиваении значений")]
+    [TestCase(1, TestName = "Проверка конструктора UniformlyAcceleratedMotion с параметрами при" +
+        " присваиваении значений")]
+    [TestCase(2, TestName = "Проверка конструктора UniformMotion с параметрами при" +
+        " присваиваении значений")]
+    public void ParameterConstructor_AssignsValuesCorrectly(int motionNumber)
+    {
+        const int initialPosion = 100;
+        const int time = 5;
+        const int speed = 8;
+
+        MotionBase motion = 
+            MotionFactory.GetMotion(motionNumber, initialPosion, time, speed);
+
+        Assert.That(motion.InitialPosition, Is.EqualTo(100));
+        Assert.That(motion.Time, Is.EqualTo(5));
+        Assert.That(motion.Speed, Is.EqualTo(8));
     }
 }
