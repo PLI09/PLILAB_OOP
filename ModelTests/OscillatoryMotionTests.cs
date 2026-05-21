@@ -9,6 +9,7 @@ namespace ModelTests;
 [TestFixture]
 public class OscillatoryMotionTests
 {
+    //TODO: refactor
     [SetUp]
     public void SetUp()
     {
@@ -23,10 +24,12 @@ public class OscillatoryMotionTests
     public void Frequency_Property_GetSet()
     {
         var motion = new OscillatoryMotion();
+        //TODO: to const
         motion.Frequency = 100;
         Assert.That(motion.Frequency, Is.EqualTo(100));
     }
 
+    //TODO: duplication
     /// <summary>
     /// Проверка валидации с NaN в частоте
     /// </summary>
@@ -40,6 +43,7 @@ public class OscillatoryMotionTests
             "Частота содержит некорректное значение"));
     }
 
+    //TODO: duplication
     /// <summary>
     /// Проверка валидации с Infinity в частоте
     /// </summary>
@@ -202,6 +206,7 @@ public class OscillatoryMotionTests
     {
         var motion1 = new OscillatoryMotion(10, 0, 1, 2); 
         var motion2 = new OscillatoryMotion(10, 0, 1, 5); 
+        //TODO: RSDN
         var pos1 = motion1.GetPosition();
         var pos2 = motion2.GetPosition();
         Assert.That(pos1, Is.Not.EqualTo(pos2));

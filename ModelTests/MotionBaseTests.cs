@@ -12,8 +12,10 @@ public class MotionBaseTests
     /// </summary>
     private class TestMotion : MotionBase
     {
+        //TODO: XML
         public TestMotion(double x0, double t, double v)
             : base(x0, t, v) { }
+        //TODO: XML
         public override double GetPosition() =>
             InitialPosition + Speed * Time;
     }

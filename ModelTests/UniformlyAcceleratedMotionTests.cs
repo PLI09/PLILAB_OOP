@@ -9,6 +9,7 @@ namespace ModelTests
     [TestFixture]
     public class UniformlyAcceleratedMotionTests
     {
+        //TODO: refactor
         [SetUp]
         public void SetUp()
         {
