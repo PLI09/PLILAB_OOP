@@ -12,7 +12,6 @@ public class MotionBaseTests
     /// </summary>
     private class TestMotion : MotionBase
     {
-        //TODO: XML+
         /// <summary>
         /// Инициализирует новый экземпляр с заданными параметрами
         /// </summary>
@@ -22,7 +21,6 @@ public class MotionBaseTests
         public TestMotion(double x0, double t, double v)
             : base(x0, t, v) { }
         
-        //TODO: XML+
         /// <summary>
         /// Возвращает текущую координату тела по формуле 
         /// равномерного движения
@@ -30,6 +28,33 @@ public class MotionBaseTests
         /// <returns>Координата тела</returns>
         public override double GetPosition() =>
             InitialPosition + Speed * Time;
+    }
+
+    private static class MotionFactory
+    {
+        public static MotionBase GetMotion(int motionNumber, 
+            double initialPosition, 
+            double time, 
+            double speed, 
+            double value = 1)
+        {
+            switch (motionNumber)
+            {
+                case 0:
+                {
+                    return new OscillatoryMotion(value, initialPosition, time, speed);
+                }
+                case 1:
+                {
+                    return new UniformlyAcceleratedMotion(value, initialPosition, time, speed);
+                }
+                case 2:
+                default:
+                {
+                    return new UniformMotion(initialPosition, time, speed);
+                }
+            }
+        }
     }
 
     /// <summary>
@@ -172,5 +197,4 @@ public class MotionBaseTests
         Assert.That(types, Does.Contain(
             typeof(OscillatoryMotion)));
     }
-
 }

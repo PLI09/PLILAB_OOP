@@ -72,6 +72,7 @@ namespace Model
         /// <returns></returns>
         public virtual string ValidateParameters()
         {
+            //TODO: validation
             if (double.IsNaN(InitialPosition) || 
                 double.IsInfinity(InitialPosition))
             {
