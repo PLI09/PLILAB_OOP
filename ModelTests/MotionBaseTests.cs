@@ -172,4 +172,5 @@ public class MotionBaseTests
         Assert.That(types, Does.Contain(
             typeof(OscillatoryMotion)));
     }
+
 }
