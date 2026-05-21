@@ -4,18 +4,29 @@ using System.Globalization;
 namespace ModelTests
 {
     /// <summary>
-    /// Дополнительные тесты для UniformlyAcceleratedMotion
+    /// Тесты для UniformlyAcceleratedMotion
     /// </summary>
     [TestFixture]
     public class UniformlyAcceleratedMotionTests
     {
-        //TODO: refactor
-        [SetUp]
-        public void SetUp()
-        {
-            Thread.CurrentThread.CurrentCulture =
-                new CultureInfo("ru-RU");
-        }
+        //TODO: refactor+
+        /// <summary>
+        /// Культура для тестов, требующих специфичного формата (ru-RU)
+        /// </summary>
+        private static readonly CultureInfo _testCulture =
+            new CultureInfo("ru-RU");
+
+        /// <summary>
+        /// Устанавливает культуру ru-RU для текущего потока.
+        /// Должен вызываться в начале каждого теста, зависящего от формата
+        /// </summary>
+        private void SetTestCulture() =>
+            Thread.CurrentThread.CurrentCulture = _testCulture;
+
+        /// <summary>
+        /// Тестовое значение ускорения (м/с²) 9.8
+        /// </summary>
+        private const double TestAcceleration = 9.8;
 
         /// <summary>
         /// Проверка расчета с нулевым ускорением
@@ -23,6 +34,7 @@ namespace ModelTests
         [TestCase(TestName = "Проверка расчета с нулевым ускорением")]
         public void GetPosition_ZeroAcceleration_EqualsUniformMotion()
         {
+            SetTestCulture();
             var accelerated = new UniformlyAcceleratedMotion(
                 0, 10, 5, 3);
             var uniform = new UniformMotion(3, 10, 5);
@@ -36,6 +48,7 @@ namespace ModelTests
         [TestCase(TestName = "Проверка расчета с отрицательным ускорением")]
         public void GetPosition_NegativeAcceleration_Decelerates()
         {
+            SetTestCulture();
             var motion = new UniformlyAcceleratedMotion(
                 -2, 0, 3, 10);
             var position = motion.GetPosition();
@@ -48,36 +61,47 @@ namespace ModelTests
         [TestCase(TestName = "Проверка свойства Acceleration")]
         public void Acceleration_Property_GetSet()
         {
+            SetTestCulture();
             var motion = new UniformlyAcceleratedMotion();
-            motion.Acceleration = 9.8;
-            Assert.That(motion.Acceleration, Is.EqualTo(9.8));
+            motion.Acceleration = TestAcceleration;
+            Assert.That(motion.Acceleration, Is.EqualTo(TestAcceleration));
         }
 
         /// <summary>
-        /// Проверка валидации с Infinity в ускорении
+        /// Проверка валидации с некорректными числовыми 
+        /// значениями в ускорении
         /// </summary>
-        [TestCase(TestName = "Проверка валидации с Infinity в ускорении")]
-        public void ValidateParameters_InfinityAcceleration_ReturnsError()
+        /// <param name="acceleration">Тестовое значение ускорения</param>
+        /// <param name="description">Описание случая для отчёта</param>
+        /// <param name="checkValueInMessage">
+        /// Если true — дополнительно проверяет, что сообщение содержит 
+        /// строковое представление значения
+        /// </param>
+        [TestCase(double.NaN, "NaN", true,
+            TestName = "Проверка валидации с NaN в ускорении")]
+        [TestCase(double.PositiveInfinity, "+Infinity", false,
+            TestName = "Проверка валидации с +Infinity в ускорении")]
+        [TestCase(double.NegativeInfinity, "-Infinity", false,
+            TestName = "Проверка валидации с -Infinity в ускорении")]
+        public void ValidateParameters_NonFiniteAcceleration_ReturnsError(
+            double acceleration,
+            string description,
+            bool checkValueInMessage = false)
         {
+            SetTestCulture();
             var motion = new UniformlyAcceleratedMotion(
-                double.PositiveInfinity, 0, 1, 1);
+                acceleration, 0, 1, 1);
             var result = motion.ValidateParameters();
             Assert.That(result, Does.Contain(
-                "Ускорение содержит некорректное значение"));
-        }
-
-        /// <summary>
-        /// Проверка валидации с NegativeInfinity в ускорении
-        /// </summary>
-        [TestCase(TestName = "Проверка валидации с NegativeInfinity" +
-            " в ускорении")]
-        public void ValidateParameters_NegInfinityAcceleration_ReturnsError()
-        {
-            var motion = new UniformlyAcceleratedMotion(
-                double.NegativeInfinity, 0, 1, 1);
-            var result = motion.ValidateParameters();
-            Assert.That(result, Does.Contain(
-                "Ускорение содержит некорректное значение"));
+                "Ускорение содержит некорректное значение"),
+                $"Ошибка не найдена для случая: {description}");
+            if (checkValueInMessage)
+            {
+                Assert.That(result, Does.Contain(
+                    acceleration.ToString(CultureInfo.CurrentCulture)),
+                    $"Сообщение должно содержать '{acceleration}' " +
+                    $"для случая: {description}");
+            }
         }
 
         /// <summary>
@@ -86,6 +110,7 @@ namespace ModelTests
         [TestCase(TestName = "Проверка Coordinate свойства")]
         public void Coordinate_ReturnsGetPositionResult()
         {
+            SetTestCulture();
             var motion = new UniformlyAcceleratedMotion(
                 2, 5, 3, 4);
             Assert.That(motion.Coordinate,
@@ -98,6 +123,7 @@ namespace ModelTests
         [TestCase(TestName = "Проверка конструктора по умолчанию")]
         public void DefaultConstructor_SetsDefaultValues()
         {
+            SetTestCulture();
             var motion = new UniformlyAcceleratedMotion();
             Assert.That(motion.InitialPosition, Is.EqualTo(1));
             Assert.That(motion.Time, Is.EqualTo(1));
@@ -112,6 +138,7 @@ namespace ModelTests
             " базовую информацию")]
         public void GetInfo_ContainsAllInfo()
         {
+            SetTestCulture();
             var motion = new UniformlyAcceleratedMotion(
                 2, 10, 5, 3);
             var info = motion.GetInfo();
@@ -128,23 +155,9 @@ namespace ModelTests
         [TestCase(TestName = "Проверка свойства Name")]
         public void Name_ReturnsCorrectValue()
         {
+            SetTestCulture();
             var motion = new UniformlyAcceleratedMotion();
             Assert.That(motion.Name, Is.EqualTo("Равноускоренное движение"));
-        }
-
-        /// <summary>
-        /// Проверка валидации с NaN в ускорении
-        /// </summary>
-        [TestCase(TestName = "Проверка валидации с NaN в ускорении")]
-        public void ValidateParameters_NaNAcceleration_ReturnsError()
-        {
-            var motion = new UniformlyAcceleratedMotion(
-                double.NaN, 0, 1, 1);
-            var result = motion.ValidateParameters();
-            Assert.That(result, Does.Contain(
-                "Ускорение содержит некорректное значение"));
-            Assert.That(result, Does.Contain
-                (double.NaN.ToString(CultureInfo.CurrentCulture)));
         }
 
         /// <summary>
@@ -154,6 +167,7 @@ namespace ModelTests
             " временем из базового класса")]
         public void ValidateParameters_InvalidTime_ReturnsBaseError()
         {
+            SetTestCulture();
             var motion = new UniformlyAcceleratedMotion(
                 1, 0, double.NaN, 1);
             var result = motion.ValidateParameters();
@@ -168,6 +182,7 @@ namespace ModelTests
             " из базового класса")]
         public void ValidateParameters_InvalidSpeed_ReturnsBaseError()
         {
+            SetTestCulture();
             var motion = new UniformlyAcceleratedMotion(
                 1, 0, 1, double.PositiveInfinity);
             var result = motion.ValidateParameters();
@@ -182,6 +197,7 @@ namespace ModelTests
             " параметров")]
         public void ValidateParameters_ValidParameters_ReturnsEmptyString()
         {
+            SetTestCulture();
             var motion = new UniformlyAcceleratedMotion(
                 9.8, 0, 10, 5);
             var result = motion.ValidateParameters();
@@ -194,6 +210,7 @@ namespace ModelTests
         [TestCase(TestName = "Проверка GetPosition с нулевым временем")]
         public void GetPosition_ZeroTime_ReturnsInitialPosition()
         {
+            SetTestCulture();
             var motion = new UniformlyAcceleratedMotion(
                 100, 42, 0, 10);
             Assert.That(motion.GetPosition(), Is.EqualTo(42).Within(1e-10));
@@ -206,6 +223,7 @@ namespace ModelTests
             "использует GetPosition")]
         public void Coordinate_Property_UsesGetPosition()
         {
+            SetTestCulture();
             var motion = new UniformlyAcceleratedMotion(3, 7, 2, 4);
             var expected = 7 + 4 * 2 + 0.5 * 3 * 4;
             Assert.That(motion.Coordinate, Is.EqualTo(21).Within(1e-10));

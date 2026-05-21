@@ -12,10 +12,22 @@ public class MotionBaseTests
     /// </summary>
     private class TestMotion : MotionBase
     {
-        //TODO: XML
+        //TODO: XML+
+        /// <summary>
+        /// Инициализирует новый экземпляр с заданными параметрами
+        /// </summary>
+        /// <param name="x0">Начальная координата</param>
+        /// <param name="t">Время</param>
+        /// <param name="v">Скорость</param>
         public TestMotion(double x0, double t, double v)
             : base(x0, t, v) { }
-        //TODO: XML
+        
+        //TODO: XML+
+        /// <summary>
+        /// Возвращает текущую координату тела по формуле 
+        /// равномерного движения
+        /// </summary>
+        /// <returns>Координата тела</returns>
         public override double GetPosition() =>
             InitialPosition + Speed * Time;
     }

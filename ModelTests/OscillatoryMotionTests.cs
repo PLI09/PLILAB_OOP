@@ -9,13 +9,24 @@ namespace ModelTests;
 [TestFixture]
 public class OscillatoryMotionTests
 {
-    //TODO: refactor
-    [SetUp]
-    public void SetUp()
-    {
-        Thread.CurrentThread.CurrentCulture =
-            new CultureInfo("ru-RU");
-    }
+    //TODO: refactor+
+    /// <summary>
+    /// Культура для тестов, требующих специфичного формата (ru-RU)
+    /// </summary>
+    private static readonly CultureInfo _testCulture =
+        new CultureInfo("ru-RU");
+
+    /// <summary>
+    /// Устанавливает культуру ru-RU для текущего потока.
+    /// Должен вызываться в начале каждого теста, зависящего от формата
+    /// </summary>
+    private void SetTestCulture() =>
+        Thread.CurrentThread.CurrentCulture = _testCulture;
+
+    /// <summary>
+    /// Тестовое значение частоты (Гц)
+    /// </summary>
+    private const double TestFrequency = 100;
 
     /// <summary>
     /// Проверка свойства Frequency
@@ -23,35 +34,26 @@ public class OscillatoryMotionTests
     [TestCase(TestName = "Проверка частоты")]
     public void Frequency_Property_GetSet()
     {
+        SetTestCulture();
         var motion = new OscillatoryMotion();
-        //TODO: to const
-        motion.Frequency = 100;
-        Assert.That(motion.Frequency, Is.EqualTo(100));
+        //TODO: to const+
+        motion.Frequency = TestFrequency;
+        Assert.That(motion.Frequency, Is.EqualTo(TestFrequency));
     }
 
-    //TODO: duplication
+    //TODO: duplication+
     /// <summary>
-    /// Проверка валидации с NaN в частоте
+    /// Проверка валидации с Infinity и NaN в частоте
     /// </summary>
-    [TestCase(TestName = "Проверка частоты на Nan")]
-    public void ValidateParameters_NaNFrequency_ReturnsError()
+    /// <param name="infinityOrNaN">Infiniry или NaN</param>
+    [TestCase(double.NaN,
+        TestName = "Проверка частоты на Nan")]
+    [TestCase(double.PositiveInfinity,
+        TestName = "Проверка частоты на Infinity")]
+    public void ValidateParameters_ReturnsError(double infinityOrNaN)
     {
         var motion = new OscillatoryMotion(
-            double.NaN, 0, 1, 1);
-        var result = motion.ValidateParameters();
-        Assert.That(result, Does.Contain(
-            "Частота содержит некорректное значение"));
-    }
-
-    //TODO: duplication
-    /// <summary>
-    /// Проверка валидации с Infinity в частоте
-    /// </summary>
-    [TestCase(TestName = "Проверка частоты на Infinity")]
-    public void ValidateParameters_InfinityFrequency_ReturnsError()
-    {
-        var motion = new OscillatoryMotion(
-            double.PositiveInfinity, 0, 1, 1);
+            infinityOrNaN, 0, 1, 1);
         var result = motion.ValidateParameters();
         Assert.That(result, Does.Contain(
             "Частота содержит некорректное значение"));
@@ -63,6 +65,7 @@ public class OscillatoryMotionTests
     [TestCase(TestName = "Проверка расчета координаты")]
     public void Coordinate_ReturnsGetPositionResult()
     {
+        SetTestCulture();
         var motion = new OscillatoryMotion(10, 5, 2, 3);
         Assert.That(motion.Coordinate,
             Is.EqualTo(motion.GetPosition()));
@@ -74,6 +77,7 @@ public class OscillatoryMotionTests
     [TestCase(TestName = "Конструктор класса")]
     public void DefaultConstructor_SetsDefaultValues()
     {
+        SetTestCulture();
         var motion = new OscillatoryMotion();
         Assert.That(motion.InitialPosition, Is.EqualTo(1));
         Assert.That(motion.Time, Is.EqualTo(1));
@@ -87,6 +91,7 @@ public class OscillatoryMotionTests
     [TestCase(TestName = "Проверка расчета при нулевом времени")]
     public void GetPosition_ZeroTime_ReturnsInitialPosition()
     {
+        SetTestCulture();
         var motion = new OscillatoryMotion(50, 10, 0, 5);
         Assert.That(motion.GetPosition(),
             Is.EqualTo(10).Within(1e-10));
@@ -98,6 +103,7 @@ public class OscillatoryMotionTests
     [TestCase(TestName = "Проверка наличия информации о частоте")]
     public void GetInfo_ContainsFrequencyInfo()
     {
+        SetTestCulture();
         var motion = new OscillatoryMotion(50, 0, 1, 10);
         var info = motion.GetInfo();
         Assert.That(info, Does.Contain("Частота"));
@@ -109,6 +115,7 @@ public class OscillatoryMotionTests
     [TestCase(TestName = "Проверка названия движения")]
     public void Name_ReturnsCorrectValue()
     {
+        SetTestCulture();
         var motion = new OscillatoryMotion();
         Assert.That(motion.Name, Is.EqualTo("Колебательное движение"));
     }
@@ -119,6 +126,7 @@ public class OscillatoryMotionTests
     [TestCase(TestName = "Проверка расчета с отрицательной частотой")]
     public void ValidateParameters_NegativeFrequency_ReturnsError()
     {
+        SetTestCulture();
         var motion = new OscillatoryMotion(-5, 0, 1, 1);
         var result = motion.ValidateParameters();
         Assert.That(result, Does.Contain
@@ -132,6 +140,7 @@ public class OscillatoryMotionTests
     [TestCase(TestName = "Проверка частоты на минус бесконечность")]
     public void ValidateParameters_NegativeInfinityFrequency_ReturnsError()
     {
+        SetTestCulture();
         var motion = new OscillatoryMotion(
             double.NegativeInfinity, 0, 1, 1);
         var result = motion.ValidateParameters();
@@ -145,6 +154,7 @@ public class OscillatoryMotionTests
     [TestCase(TestName = "Проверка на корректные параметры")]
     public void ValidateParameters_ValidParameters_ReturnsEmptyString()
     {
+        SetTestCulture();
         var motion = new OscillatoryMotion(10, 5, 2, 3);
         var result = motion.ValidateParameters();
         Assert.That(result, Is.Empty);
@@ -156,6 +166,7 @@ public class OscillatoryMotionTests
     [TestCase(TestName = "Проверка времени")]
     public void ValidateParameters_InvalidTimeFromBase_ReturnsBaseError()
     {
+        SetTestCulture();
         var motion = new OscillatoryMotion(1, 0, double.NaN, 1);
         var result = motion.ValidateParameters();
         Assert.That(result, Is.Not.Empty);
@@ -168,6 +179,7 @@ public class OscillatoryMotionTests
     [TestCase(TestName = "Проверка скорости")]
     public void ValidateParameters_InvalidSpeedFromBase_ReturnsBaseError()
     {
+        SetTestCulture();
         var motion = new OscillatoryMotion(1, 0, 1, double.PositiveInfinity);
         var result = motion.ValidateParameters();
         Assert.That(result, Is.Not.Empty);
@@ -181,6 +193,7 @@ public class OscillatoryMotionTests
         " колебательного движения")]
     public void GetPosition_CalculatesCorrectly_WithKnownValues()
     {
+        SetTestCulture();
         var motion = new OscillatoryMotion(
             Math.PI, 10, 0.5, 2);
         var expected = 10 + (Math.PI / 2) * Math.Sin(Math.PI * 0.5);
@@ -194,6 +207,7 @@ public class OscillatoryMotionTests
     [TestCase(TestName = "Проверка расчета при нулевом значении частоты")]
     public void GetPosition_ZeroFrequency_ReturnsInitialPosition()
     {
+        SetTestCulture();
         var motion = new OscillatoryMotion(0, 42, 100, 5);
         Assert.That(motion.GetPosition(), Is.EqualTo(42).Within(1e-10));
     }
@@ -204,12 +218,14 @@ public class OscillatoryMotionTests
     [TestCase(TestName = "Проверка корректности деления на скорость")]
     public void GetPosition_DivisionBySpeed_AffectsResult()
     {
+        SetTestCulture();
         var motion1 = new OscillatoryMotion(10, 0, 1, 2); 
         var motion2 = new OscillatoryMotion(10, 0, 1, 5); 
-        //TODO: RSDN
-        var pos1 = motion1.GetPosition();
-        var pos2 = motion2.GetPosition();
-        Assert.That(pos1, Is.Not.EqualTo(pos2));
+        //TODO: RSDN+
+        var position1 = motion1.GetPosition();
+        var position2 = motion2.GetPosition();
+        Assert.That(position1, 
+            Is.Not.EqualTo(position2));
     }
 
     /// <summary>
@@ -219,6 +235,7 @@ public class OscillatoryMotionTests
         " базового класса")]
     public void GetInfo_ContainsBaseInfo()
     {
+        SetTestCulture();
         var motion = new OscillatoryMotion(50, 15, 3, 7);
         var info = motion.GetInfo();
         Assert.That(info, Does.Contain("Начальная координата"));
@@ -235,6 +252,7 @@ public class OscillatoryMotionTests
         " присваиваении значений")]
     public void ParameterConstructor_AssignsValuesCorrectly()
     {
+        SetTestCulture();
         var motion = new OscillatoryMotion(25, 100, 5, 8);
         Assert.That(motion.Frequency, Is.EqualTo(25));
         Assert.That(motion.InitialPosition, Is.EqualTo(100));
