@@ -9,20 +9,14 @@ namespace ModelTests;
 [TestFixture]
 public class OscillatoryMotionTests
 {
-    //TODO: refactor+
-    /// <summary>
-    /// Культура для тестов, требующих специфичного формата (ru-RU)
-    /// </summary>
-    private static readonly CultureInfo _testCulture =
-        new CultureInfo("ru-RU");
-
     /// <summary>
     /// Устанавливает культуру ru-RU для текущего потока.
     /// Должен вызываться в начале каждого теста, зависящего от формата
     /// </summary>
     private void SetTestCulture() =>
-        Thread.CurrentThread.CurrentCulture = _testCulture;
+        Thread.CurrentThread.CurrentCulture = new CultureInfo("ru-RU");
 
+    //TODO: refactor
     /// <summary>
     /// Тестовое значение частоты (Гц)
     /// </summary>
@@ -36,12 +30,10 @@ public class OscillatoryMotionTests
     {
         SetTestCulture();
         var motion = new OscillatoryMotion();
-        //TODO: to const+
         motion.Frequency = TestFrequency;
         Assert.That(motion.Frequency, Is.EqualTo(TestFrequency));
     }
 
-    //TODO: duplication+
     /// <summary>
     /// Проверка валидации с Infinity и NaN в частоте
     /// </summary>
@@ -221,7 +213,6 @@ public class OscillatoryMotionTests
         SetTestCulture();
         var motion1 = new OscillatoryMotion(10, 0, 1, 2); 
         var motion2 = new OscillatoryMotion(10, 0, 1, 5); 
-        //TODO: RSDN+
         var position1 = motion1.GetPosition();
         var position2 = motion2.GetPosition();
         Assert.That(position1, 
@@ -238,6 +229,7 @@ public class OscillatoryMotionTests
         SetTestCulture();
         var motion = new OscillatoryMotion(50, 15, 3, 7);
         var info = motion.GetInfo();
+        
         Assert.That(info, Does.Contain("Начальная координата"));
         Assert.That(info, Does.Contain("Xo=15"));
         Assert.That(info, Does.Contain("Скорость"));
@@ -254,6 +246,7 @@ public class OscillatoryMotionTests
     {
         SetTestCulture();
         var motion = new OscillatoryMotion(25, 100, 5, 8);
+        
         Assert.That(motion.Frequency, Is.EqualTo(25));
         Assert.That(motion.InitialPosition, Is.EqualTo(100));
         Assert.That(motion.Time, Is.EqualTo(5));

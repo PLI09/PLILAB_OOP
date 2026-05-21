@@ -12,7 +12,6 @@ public class MotionBaseTests
     /// </summary>
     private class TestMotion : MotionBase
     {
-        //TODO: XML+
         /// <summary>
         /// Инициализирует новый экземпляр с заданными параметрами
         /// </summary>
@@ -22,7 +21,6 @@ public class MotionBaseTests
         public TestMotion(double x0, double t, double v)
             : base(x0, t, v) { }
         
-        //TODO: XML+
         /// <summary>
         /// Возвращает текущую координату тела по формуле 
         /// равномерного движения
