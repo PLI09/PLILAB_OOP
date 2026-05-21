@@ -137,7 +137,7 @@ public class MotionBaseTests
     /// <summary>
     /// Проверка атрибутов сериализации на MotionBase
     /// </summary>
-    [TestCase(TestName = "Проверка всех типов дыижений в сохраненном файле")]
+    [TestCase(TestName = "Проверка всех типов движений в сохраненном файле")]
     public void MotionBase_HasXmlIncludeAttributes()
     {
         var type = typeof(MotionBase);
