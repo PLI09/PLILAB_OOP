@@ -26,8 +26,8 @@
         /// <param name="speed"></param>
         /// <param name="initialPosition"></param>
         /// <param name="time"></param>
-        public UniformMotion(double speed, double initialPosition,
-            double time) : base(initialPosition, time, speed) { }
+        public UniformMotion(double initialPosition, double time, 
+            double speed) : base(initialPosition, time, speed) { }
 
         /// <summary>
         /// Метод для вычисления координаты для равномерного движения

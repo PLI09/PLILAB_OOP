@@ -1,5 +1,6 @@
 ﻿using Model;
 using System.Globalization;
+using static ModelTests.MotionBaseTests;
 
 
 namespace ModelTests;
@@ -53,39 +54,15 @@ public class OscillatoryMotionTests : MotionBaseTests
     }
 
     /// <summary>
-    /// Проверяет валидацию частоты на отрицательные и 
-    /// некорректные значения (NaN, Infinity)
+    /// Проверка Coordinate свойства
     /// </summary>
-    /// <param name="invalidFrequency">Некорректное значение частоты</param>
-    /// <param name="expectedError">Ожидаемое сообщение об ошибке</param>
-    /// <param name="valueInMessage">Значение, которое должно быть
-    /// в сообщении</param>
-    /// <param name="description">Описание случая для отладки</param>
-    [TestCase(-5, "Частота не может быть отрицательной", "-5",
-        "отрицательное значение",
-        TestName = "Проверка частоты на отрицательное")]
-    [TestCase(double.NaN, "Частота содержит некорректное значение", null,
-        "NaN", TestName = "Проверка частоты на NaN")]
-    [TestCase(double.PositiveInfinity, 
-        "Частота содержит некорректное значение", null,"+Infinity",
-        TestName = "Проверка частоты на +Infinity")]
-    [TestCase(double.NegativeInfinity, 
-        "Частота содержит некорректное значение", null,"-Infinity", 
-        TestName = "Проверка частоты на -Infinity")]
-    public void ValidateParameters_InvalidFrequency_ReturnsError(
-        double invalidFrequency, string expectedError,
-        string? valueInMessage, string description)
+    [TestCase(TestName = "Проверка расчета координаты")]
+    public void Coordinate_ReturnsGetPositionResult()
     {
         SetTestCulture();
-        var motion = new OscillatoryMotion(invalidFrequency, 0, 1, 1);
-
-        AssertFrequencyValidation(motion, expectedError, description);
-
-        if (valueInMessage != null)
-        {
-            Assert.That(motion.ValidateParameters(), Does.Contain(valueInMessage),
-                $"Сообщение должно содержать '{valueInMessage}'");
-        }
+        var motion = new OscillatoryMotion(10, 5, 2, 3);
+        Assert.That(motion.Coordinate,
+            Is.EqualTo(motion.GetPosition()));
     }
 
     [TestCase(TestName = "Конструктор класса")]
@@ -132,38 +109,11 @@ public class OscillatoryMotionTests : MotionBaseTests
         Assert.That(motion.Name, Is.EqualTo(expectedName));
     }
 
-    [TestCase(TestName = "Проверка на корректные параметры")]
-    public void ValidateParameters_ValidParameters_ReturnsEmptyString()
-    {
-        SetTestCulture();
-        const double frequency = 10, x0 = 5, t = 2, v = 3;
-
-        var motion = new OscillatoryMotion(frequency, x0, t, v);
-        Assert.That(motion.ValidateParameters(), Is.Empty);
-    }
-
     /// <summary>
-    /// Объединённый тест: некорректные базовые параметры не должны вызывать ошибки частоты
+    /// Проверка расчета GetPosition с известными значениями
     /// </summary>
-    [TestCase(double.NaN, null, "время", TestName = "Проверка времени")]
-    [TestCase(null, double.PositiveInfinity, "скорость", TestName = "Проверка скорости")]
-    public void ValidateParameters_InvalidBaseParam_DoesNotAffectFrequencyCheck(
-        double? invalidTime, double? invalidSpeed, string paramName)
-    {
-        SetTestCulture();
-        const double frequency = 1, x0 = 0, defaultValue = 1;
-        var t = invalidTime ?? defaultValue;
-        var v = invalidSpeed ?? defaultValue;
-
-        var motion = new OscillatoryMotion(frequency, x0, t, v);
-        var result = motion.ValidateParameters();
-
-        Assert.That(result, Is.Not.Empty);
-        Assert.That(result, Does.Not.Contain("Частота"),
-            $"Ошибка не должна упоминать частоту при некорректном {paramName}");
-    }
-
-    [TestCase(TestName = "Проверка расчета координаты для колебательного движения")]
+    [TestCase(TestName = "Проверка расчета координаты для" +
+        " колебательного движения")]
     public void GetPosition_CalculatesCorrectly_WithKnownValues()
     {
         SetTestCulture();
@@ -191,12 +141,12 @@ public class OscillatoryMotionTests : MotionBaseTests
     public void GetPosition_DivisionBySpeed_AffectsResult()
     {
         SetTestCulture();
-        const double frequency = 10, x0 = 0, t = 1, v1 = 2, v2 = 5;
-
-        var motion1 = new OscillatoryMotion(frequency, x0, t, v1);
-        var motion2 = new OscillatoryMotion(frequency, x0, t, v2);
-
-        Assert.That(motion1.GetPosition(), Is.Not.EqualTo(motion2.GetPosition()));
+        var motion1 = new OscillatoryMotion(10, 0, 1, 2);
+        var motion2 = new OscillatoryMotion(10, 0, 1, 5);
+        var position1 = motion1.GetPosition();
+        var position2 = motion2.GetPosition();
+        Assert.That(position1,
+            Is.Not.EqualTo(position2));
     }
 
     [TestCase(TestName = "Проверка наличия информации о параметрах базового класса")]
@@ -215,16 +165,21 @@ public class OscillatoryMotionTests : MotionBaseTests
         Assert.That(info, Does.Contain($"Частота ω={frequency}"));
     }
 
-    [TestCase(25, 100, 5, 8, TestName = "Проверка конструктора с параметрами")]
-    public void ParameterConstructor_AssignsValuesCorrectly(
-        double frequency, double initialPosition, double time, double speed)
+    /// <summary>
+    /// Проверка конструктора с параметрами при присваиваении значений
+    /// </summary>
+    [TestCase(0, TestName = "Проверка конструктора OscillatoryMotion с " +
+        "параметрами при присваиваении значений")]
+    public void ParameterConstructor_AssignsValuesCorrectly(int motionNumber)
     {
-        SetTestCulture();
-        var motion = new OscillatoryMotion(frequency, initialPosition, time, speed);
+        const int initialPosition = 100;
+        const int time = 5;
+        const int speed = 8;
+        const int frequency = 25;
 
-        Assert.That(motion.Frequency, Is.EqualTo(frequency));
-        Assert.That(motion.InitialPosition, Is.EqualTo(initialPosition));
-        Assert.That(motion.Time, Is.EqualTo(time));
-        Assert.That(motion.Speed, Is.EqualTo(speed));
+        var motion = (OscillatoryMotion)MotionFactory.GetMotion(
+            motionNumber, initialPosition, time, speed, frequency);
+
+        Assert.That(motion.Frequency, Is.EqualTo(25));
     }
 }

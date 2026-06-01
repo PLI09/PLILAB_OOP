@@ -34,18 +34,6 @@ public class RandomMoveTests
     }
 
     /// <summary>
-    /// Проверка, что сгенерированное движение валидно
-    /// </summary>
-    [TestCase(TestName = "Проверка, что сгенерированное движение валидно")]
-    public void GetRandomMove_GeneratedMotionIsValid()
-    {
-        var result = RandomMove.GetRandomMove();
-        var error = result.ValidateParameters();
-        Assert.That(string.IsNullOrEmpty(error),
-            Is.True, () => $"Error: {error}");
-    }
-
-    /// <summary>
     /// Проверка, что генерируются разные типы движений
     /// </summary>
     [TestCase(TestName = "Проверка, что генерируются разные типы движений")]

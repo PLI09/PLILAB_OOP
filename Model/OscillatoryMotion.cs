@@ -6,6 +6,11 @@
     public class OscillatoryMotion : MotionBase
     {
         /// <summary>
+        /// Частота
+        /// </summary>
+        private double _frequency;
+
+        /// <summary>
         /// Название движения
         /// </summary>
         public override string Name => "Колебательное движение";
@@ -37,7 +42,19 @@
         /// <summary>
         /// Свойство для частоты
         /// </summary>
-        public double Frequency { get; set; }
+        public double Frequency 
+        {
+            get 
+            { 
+                return _frequency;
+            }
+            set 
+            { 
+                ValidateParameters(value);
+                ValidateNegativeParameters(value);
+                _frequency = value;
+            } 
+        }
 
         /// <summary>
         /// Метод для вывод информации о частоте
@@ -56,31 +73,6 @@
         {
             return InitialPosition + (Frequency / Speed) * 
                 Math.Sin(Frequency * Time);
-        }
-
-        /// <summary>
-        /// Валидация для колебательного движения
-        /// </summary>
-        /// <returns>Сообщение об ошибке</returns>
-        public override string ValidateParameters()
-        {
-            var baseError = base.ValidateParameters();
-            if (!string.IsNullOrEmpty(baseError))
-            {
-                return baseError;
-            }
-
-            if (double.IsNaN(Frequency) || double.IsInfinity(Frequency)) 
-            {
-                return $"Частота содержит некорректное значение: " +
-                    $"{Frequency}";
-            }
-
-            if (Frequency < 0) 
-            {
-                return $"Частота не может быть отрицательной: {Frequency}";
-            }
-            return string.Empty;
         }
     }
 }

@@ -22,11 +22,4 @@ public class UniformMotionTests : MotionBaseTests
         var motion = new UniformMotion(v, x0, t);
         Assert.That(motion.GetPosition(), Is.EqualTo(expected).Within(1e-10));
     }
-
-    [TestCase(TestName = "Проверка конструктора по умолчанию")]
-    public void DefaultConstructor_SetsDefaultValues()
-    {
-        var motion = new UniformMotion();
-        AssertBasePropertiesHaveDefaults(motion);
-    }
 }

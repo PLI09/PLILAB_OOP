@@ -6,6 +6,11 @@
     public class UniformlyAcceleratedMotion : MotionBase
     {
         /// <summary>
+        /// Ускорение
+        /// </summary>
+        private double _acceleration;
+
+        /// <summary>
         /// Название типа движения
         /// </summary>
         public override string Name => "Равноускоренное движение";
@@ -37,7 +42,18 @@
         /// <summary>
         /// Свойство для ускорения
         /// </summary>
-        public double Acceleration{ get; set; }
+        public double Acceleration
+        {
+            get 
+            { 
+                return _acceleration;
+            }
+            set 
+            {
+                ValidateParameters(value);
+                _acceleration = value;
+            } 
+        }
 
         /// <summary>
         /// Метод для вывода информации о ускорении
@@ -56,27 +72,6 @@
         {
             return InitialPosition + Speed * Time + 0.5 *
                 Acceleration * Time * Time;
-        }
-
-        /// <summary>
-        /// Валидация для равноускоренного движения
-        /// </summary>
-        /// <returns>Сообщение об ошибке</returns>
-        public override string ValidateParameters()
-        {
-            var baseError = base.ValidateParameters();
-            if (!string.IsNullOrEmpty(baseError))
-            {
-                return baseError;
-            }
-            if (double.IsNaN(Acceleration) || 
-                double.IsInfinity(Acceleration))
-            {
-                return $"Ускорение содержит некорректное значение:" +
-                    $" {Acceleration}";
-            }
-
-            return string.Empty;
         }
     }
 }

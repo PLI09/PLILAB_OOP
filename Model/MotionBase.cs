@@ -12,6 +12,21 @@ namespace Model
     public abstract class MotionBase
     {
         /// <summary>
+        /// Время
+        /// </summary>
+        private double _time;
+
+        /// <summary>
+        /// Скорость
+        /// </summary>
+        private double _speed;
+
+        /// <summary>
+        /// Начальная координата
+        /// </summary>
+        private double _initialPosition;
+
+        /// <summary>
         /// Тип движения
         /// </summary>
         public virtual string Name => "Тип движения";
@@ -38,17 +53,52 @@ namespace Model
         /// <summary>
         /// Свойство для начальной координаты
         /// </summary>
-        public double InitialPosition { get; set; }
+        public double InitialPosition 
+        {
+            get 
+            {
+                return _initialPosition;
+            }
+            set 
+            {
+                ValidateParameters(value);
+                _initialPosition = value;
+            }
+        }
 
         /// <summary>
         /// Свойство для времени
         /// </summary>
-        public double Time { get; set; }
+        public double Time 
+        {
+            get
+            {
+                return _time;
+            }
+            set 
+            {
+                ValidateParameters(value);
+                ValidateNegativeParameters(value);
+                _time = value;
+            } 
+        }
 
         /// <summary>
         /// Свойство для скорости
         /// </summary>
-        public double Speed { get; set; }
+        public double Speed 
+        {
+            get 
+            { 
+                return _speed;
+            }
+            set 
+            {
+                ValidateParameters(value);
+                ValidateNegativeParameters(value);
+                _speed = value;
+            }
+        }
 
         /// <summary>
         /// Вывод базовой информации
@@ -67,40 +117,36 @@ namespace Model
         public abstract double GetPosition();
 
         /// <summary>
-        /// Валидация введенных данных
+        /// Проверка параметров на NaN или Infinity
         /// </summary>
-        /// <returns></returns>
-        public virtual string ValidateParameters()
+        /// <param name="parameter">Параметр, который 
+        /// не должен быть NaN или Infinity</param>
+        /// <exception cref="IncorrectArgumentException">
+        /// Исключение</exception>
+        public void ValidateParameters(double parameter)
         {
-            //TODO: validation
-            if (double.IsNaN(InitialPosition) || 
-                double.IsInfinity(InitialPosition))
+            if (double.IsNaN(parameter) || double.IsInfinity(parameter))
             {
-                return $"Начальная координата содержит некорректное" +
-                    $" значение: {InitialPosition}";
+                throw new IncorrectArgumentException(
+                    $"Параметр содержит некорректное значение: {parameter}");
             }
+        }
 
-            if (double.IsNaN(Time) || double.IsInfinity(Time))
+        /// <summary>
+        /// Проверка параметров на отрицательное значение
+        /// </summary>
+        /// <param name="parameter">Параметр, который 
+        /// не должен быть отрицательным</param>
+        /// <exception cref="IncorrectArgumentException">
+        /// Исключение</exception>
+        protected void ValidateNegativeParameters(double parameter)
+        {
+            if (parameter < 0)
             {
-                return $"Время содержит некорректное значение: {Time}";
+                throw new IncorrectArgumentException(
+                    $"Данный параметр не может быть отрицательным: " +
+                    $"{parameter}");
             }
-
-            if (double.IsNaN(Speed) || double.IsInfinity(Speed))
-            {
-                return $"Скорость содержит некорректное значение: {Speed}";
-            }
-
-            if (Time < 0)
-            {
-                return $"Время не может быть отрицательным: {Time}";
-            }
-
-            if (Speed < 0)
-            {
-                return $"Скорость не может быть отрицательной: {Speed}";
-            }
-
-            return string.Empty;
         }
     }
 }

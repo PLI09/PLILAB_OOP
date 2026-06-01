@@ -401,9 +401,8 @@ namespace Lab4
                 for (int i = 0; i < loadedList.Count; i++)
                 {
                     var motion = loadedList[i];
-                    var error = motion?.ValidateParameters();
-
-                    if (string.IsNullOrEmpty(error))
+                    
+                    if (string.IsNullOrEmpty(Convert.ToString(motion)))
                     {
                         validMotions.Add(motion);
                     }
@@ -411,7 +410,7 @@ namespace Lab4
                     {
                         errors.Add($"Запись #{i + 1} " +
                             $"({motion?.Name ?? "Неизвестный тип"}):" +
-                            $"\n{error}");
+                            $"\n{Convert.ToString(motion)}");
                     }
                 }
 
