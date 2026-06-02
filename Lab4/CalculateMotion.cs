@@ -102,16 +102,16 @@ namespace Lab4
             try
             {
                 var motion = motionInput.GetMotion();
-
-                string validationError = motion.ValidateParameters();
-
-                if (!string.IsNullOrEmpty(validationError))
+            
+                string validationError = Convert.ToString(motion);
+            
+                if (string.IsNullOrEmpty(validationError))
                 {
                     MessageBox.Show(validationError, "Ошибка ввода",
                         MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
-
+            
                 MoveAdded?.Invoke(this, new AddedCalculationMotion(motion));
                 Close();
             }

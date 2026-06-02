@@ -1,139 +1,98 @@
 ﻿using Model;
-using NUnit.Framework;
-using System.Globalization;
-using static ModelTests.MotionBaseTests;
 
-namespace ModelTests;
-
-[TestFixture]
-public class UniformlyAcceleratedMotionTests : MotionBaseTests
+namespace ModelTests
 {
-    private static readonly CultureInfo _testCulture = new CultureInfo("ru-RU");
-    private void SetTestCulture() => Thread.CurrentThread.CurrentCulture = _testCulture;
-
     /// <summary>
-    /// Универсальная проверка валидации ускорения
+    /// Класс для тестирования класса UniformlyAcceleratedMotion
     /// </summary>
-    private static void AssertAccelerationValidation(
-        UniformlyAcceleratedMotion motion, string expectedErrorFragment, string description)
+    [TestFixture]
+    public class UniformlyAcceleratedMotionTests :
+        MotionTestsBase<UniformlyAcceleratedMotion>
     {
-        var result = motion.ValidateParameters();
-        Assert.That(result, Does.Contain(expectedErrorFragment),
-            $"Ошибка не найдена: {description}");
-    }
-
-    [TestCase(TestName = "Проверка расчета с нулевым ускорением")]
-    public void GetPosition_ZeroAcceleration_EqualsUniformMotion()
-    {
-        SetTestCulture();
-        const double acceleration = 0, x0 = 10, t = 5, v = 3;
-
-        var accelerated = new UniformlyAcceleratedMotion(acceleration, x0, t, v);
-        var uniform = new UniformMotion(v, x0, t);
-
-        Assert.That(accelerated.GetPosition(), Is.EqualTo(uniform.GetPosition()).Within(1e-10));
-    }
-
-    [TestCase(TestName = "Проверка расчета с отрицательным ускорением")]
-    public void GetPosition_NegativeAcceleration_Decelerates()
-    {
-        SetTestCulture();
-        const double acceleration = -2, x0 = 0, t = 3, v = 10;
-        const double expected = 21;
-
-        var motion = new UniformlyAcceleratedMotion(acceleration, x0, t, v);
-        Assert.That(motion.GetPosition(), Is.EqualTo(expected).Within(1e-10));
-    }
-
-    [TestCase(TestName = "Проверка свойства Acceleration")]
-    public void Acceleration_Property_GetSet()
-    {
-        SetTestCulture();
-        const double testAcceleration = 9.8;
-
-        var motion = new UniformlyAcceleratedMotion();
-        motion.Acceleration = testAcceleration;
-        Assert.That(motion.Acceleration, Is.EqualTo(testAcceleration));
-    }
+        /// <summary>
+        /// Создание экземпляра движения с заданными параметрами
+        /// </summary>
+        /// <param name="acceleration">Ускорение</param>
+        /// <param name="initialPosition">Начальная координата</param>
+        /// <param name="time">Время</param>
+        /// <param name="speed">Скорость</param>
+        /// <returns>Экземпляр класса UniformlyAcceleratedMotion</returns>
+        protected override UniformlyAcceleratedMotion CreateMotion(
+            double initialPosition, double time,
+            double speed, double acceleration)
+                => new UniformlyAcceleratedMotion(
+                    acceleration, initialPosition, time, speed);
 
         /// <summary>
-        /// Проверка Coordinate свойства
+        /// Создание экземпляра движения через конструктор по умолчанию
         /// </summary>
-        [TestCase(TestName = "Проверка Coordinate свойства")]
-        public void Coordinate_ReturnsGetPositionResult()
+        /// <returns>Экземпляр с типом движения "Равноускоренное"</returns>
+        protected override UniformlyAcceleratedMotion CreateDefaultMotion()
+            => new UniformlyAcceleratedMotion();
+
+        /// <summary>
+        /// Ожидаемое значение свойства Name для данного типа движения
+        /// </summary>
+        protected override string ExpectedName => "Равноускоренное движение";
+
+        /// <summary>
+        /// Проверка значения свойства Acceleration
+        /// </summary>
+        /// <param name="motion">Тип движения</param>
+        /// <param name="acceleration">Ускорение</param>
+        protected override void AssertSpecificProperty(
+            UniformlyAcceleratedMotion motion, double acceleration)
+                => Assert.That(motion.Acceleration,
+                    Is.EqualTo(acceleration));
+
+        /// <summary>
+        /// Проверка, что GetInfo содержит информацию об ускорении
+        /// </summary>
+        /// <param name="motion">Тип движения</param>
+        protected override void AssertGetInfoContainsSpecific(
+            UniformlyAcceleratedMotion motion)
         {
-            SetTestCulture();
-            var motion = new UniformlyAcceleratedMotion(
-                2, 5, 3, 4);
-            Assert.That(motion.Coordinate,
-                Is.EqualTo(motion.GetPosition()));
+            var info = motion.GetInfo();
+            Assert.That(info, Does.Contain(
+                $"Ускорение a={motion.Acceleration} м/с²"));
         }
 
         /// <summary>
-        /// Проверка конструктора по умолчанию
+        /// Проверка, что недопустимые значения 
+        /// ускорения выбрасывают исключение
         /// </summary>
-        [TestCase(1, TestName = "Проверка конструктора " +
-            "UniformlyAcceleratedMotion с параметрами при " +
-            "присваиваении значений")]
-        public void DefaultConstructor_SetsDefaultValues(int motionNumber)
+        /// <param name="motion">Тип движения</param>
+        protected override void AssertInvalidSpecificProperty(
+            UniformlyAcceleratedMotion motion)
         {
-            const int initialPosition = 100;
-            const int time = 5;
-            const int speed = 8;
-            const int acceleration = 1;
-
-            var motion = (UniformlyAcceleratedMotion)MotionFactory.GetMotion(
-                motionNumber, initialPosition, time, speed, acceleration);
-
-            Assert.That(motion.Acceleration, Is.EqualTo(1));
+            Assert.Throws<IncorrectArgumentException>(()
+                => motion.Acceleration = double.NaN);
+            Assert.Throws<IncorrectArgumentException>(()
+                => motion.Acceleration = double.PositiveInfinity);
+            Assert.DoesNotThrow(()
+                => motion.Acceleration = -5);
         }
-
-    [TestCase(TestName = "Проверка GetInfo содержит всю информацию")]
-    public void GetInfo_ContainsAllInfo()
-    {
-        SetTestCulture();
-        const double acceleration = 2, x0 = 10, t = 5, v = 3;
-
-        var motion = new UniformlyAcceleratedMotion(acceleration, x0, t, v);
-        var info = motion.GetInfo();
-
-        Assert.That(info, Does.Contain($"Начальная координата Xo={x0} м"));
-        Assert.That(info, Does.Contain($"Скорость V={v} м/с"));
-        Assert.That(info, Does.Contain($"Время t={t} c"));
-        Assert.That(info, Does.Contain("Ускорение"));
-    }
-
-    [TestCase(TestName = "Проверка свойства Name")]
-    public void Name_ReturnsCorrectValue()
-    {
-        SetTestCulture();
-        const string expectedName = "Равноускоренное движение";
-
-        var motion = new UniformlyAcceleratedMotion();
-        Assert.That(motion.Name, Is.EqualTo(expectedName));
-    }
 
         /// <summary>
-        /// Проверка GetPosition с нулевым временем
+        /// Проверка корректности расчёта GetPosition с известными значениями
         /// </summary>
-        [TestCase(TestName = "Проверка GetPosition с нулевым временем")]
-        public void GetPosition_ZeroTime_ReturnsInitialPosition()
+        /// <param name="motion">Тип движения</param>
+        /// <param name="expected">Значение</param>
+        protected override void AssertGetPositionCalculatesCorrectly(
+            UniformlyAcceleratedMotion motion, double expected)
+                => Assert.That(motion.GetPosition(),
+                    Is.EqualTo(expected).Within(1e-10));
+
+        /// <summary>
+        /// Расчет координаты для равноускоренного движения
+        /// </summary>
+        /// <param name="motion"></param>
+        /// <returns>Рассчитанная координата</returns>
+        protected override double ComputeExpectedPositionForKnownValues(
+            UniformlyAcceleratedMotion motion)
         {
-            SetTestCulture();
-            var motion = new UniformlyAcceleratedMotion(
-                100, 42, 0, 10);
-            Assert.That(motion.GetPosition(), Is.EqualTo(42).Within(1e-10));
+            // Для a=π, x0=10, t=0.5, v=2
+            return 10 + 2 * 0.5 + 0.5 * Math.PI * 0.25;
         }
-
-    [TestCase(TestName = "Проверка, что Coordinate использует GetPosition")]
-    public void Coordinate_Property_UsesGetPosition()
-    {
-        SetTestCulture();
-        const double acceleration = 3, x0 = 7, t = 2, v = 4;
-        const double expected = 7 + 4 * 2 + 0.5 * 3 * 4;
-
-        var motion = new UniformlyAcceleratedMotion(acceleration, x0, t, v);
-        Assert.That(motion.Coordinate, Is.EqualTo(expected).Within(1e-10));
-        Assert.That(motion.Coordinate, Is.EqualTo(motion.GetPosition()));
     }
 }

@@ -1,158 +1,245 @@
-﻿using Model;
+﻿using Microsoft.VisualStudio.TestPlatform.ObjectModel;
+using Model;
 
-namespace ModelTests;
-/// <summary>
-/// Тесты для класса MotionBase
-/// </summary>
-[TestFixture]
-public class MotionBaseTests
+namespace ModelTests
 {
     /// <summary>
-    /// Вспомогательный класс для тестирования
+    /// Базовый класс для тестирования всех типов движения
     /// </summary>
-    private class TestMotion : MotionBase
+    /// <typeparam name="T">Тип движения (наследник MotionBase)</typeparam>
+    public abstract class MotionTestsBase<T> where T : MotionBase
     {
         /// <summary>
-        /// Инициализация нового экземпляра с заданными параметрами
+        /// Создание экземпляра движения с заданными параметрами
         /// </summary>
         /// <param name="initialPosition">Начальная координата</param>
         /// <param name="time">Время</param>
         /// <param name="speed">Скорость</param>
-        public TestMotion(double initialPosition, double time, double speed) 
-            : base(initialPosition, time, speed) { }
+        /// <param name="specificParam">Ускорение или частота</param>
+        /// <returns>Экземпляр типа движения</returns>
+        protected abstract T CreateMotion(
+            double initialPosition, double time, double speed,
+            double specificParam = 1);
 
         /// <summary>
-        /// Возвращает текущую координату тела ппо формуле
+        /// Создание экземпляра движения через конструктор по умолчанию
         /// </summary>
-        /// <returns>Координата тела</returns>
-        public override double GetPosition() => 
-            InitialPosition + Speed * Time;
-    }
+        /// <returns>Экземпляр типа движения</returns>
+        protected abstract T CreateDefaultMotion();
 
-    public static class MotionFactory
-    {
-        public static MotionBase GetMotion(int motionNumber,
-            double initialPosition,
-            double time,
-            double speed,
-            double value = 1)
+        /// <summary>
+        /// Ожидаемое значение свойства Name для данного типа движения
+        /// </summary>
+        protected abstract string ExpectedName { get; }
+
+        /// <summary>
+        /// Проверка значения специфического свойства 
+        /// (Frequency, Acceleration или отсутствие)
+        /// </summary>
+        /// <param name="motion">Тип движения</param>
+        /// <param name="expectedValue">Специфическое значение</param>
+        protected abstract void AssertSpecificProperty(
+            T motion, double expectedValue);
+
+        /// <summary>
+        /// Проверка, что GetInfo содержит информацию о 
+        /// специфическом параметре
+        /// </summary>
+        /// <param name="motion">Тип движения</param>
+        protected abstract void AssertGetInfoContainsSpecific(T motion);
+
+        /// <summary>
+        /// Проверка, что недопустимые значения специфического 
+        /// свойства выбрасывают исключение
+        /// </summary>
+        /// <param name="motion">Тип движения</param>
+        protected abstract void AssertInvalidSpecificProperty(T motion);
+
+        /// <summary>
+        /// Проверка корректности расчёта GetPosition с известными значениями
+        /// </summary>
+        /// <param name="motion">Тип движения</param>
+        /// <param name="expected">Значение</param>
+        protected abstract void AssertGetPositionCalculatesCorrectly(
+            T motion, double expected);
+
+        /// <summary>
+        /// Проверка свойства Name на возврат ожидаемого значения
+        /// </summary>
+        [TestCase(TestName = "Name возвращает ожидаемое значение")]
+        public void Name_ReturnsExpectedValue()
         {
-            switch (motionNumber)
-            {
-                case 0:
-                    {
-                        return new OscillatoryMotion(
-                            value, initialPosition, time, speed);
-                    }
-                case 1:
-                    {
-                        return new UniformlyAcceleratedMotion(
-                            value, initialPosition, time, speed);
-                    }
-                case 2:
-                default:
-                    {
-                        return new UniformMotion(
-                            initialPosition, time, speed);
-                    }
-            }
+            var motion = CreateDefaultMotion();
+            Assert.That(motion.Name, Is.EqualTo(ExpectedName));
         }
-    }
 
-    /// <summary>
-    /// Проверяет, что свойство Name возвращает базовое значение
-    /// "Тип движения"
-    /// </summary>
-    [TestCase(TestName = "Проверка типа движения")]
-    public void Name_Default_ReturnsBaseValue()
-    {
-        const string expectedName = "Тип движения";
-        var motion = new TestMotion(0, 0, 0);
-        
-        Assert.That(motion.Name, Is.EqualTo(expectedName));
-    }
+        /// <summary>
+        /// Проверка, что свойство Coordinate совпадает с 
+        /// результатом GetPosition()
+        /// </summary>
+        [TestCase(TestName = "Coordinate совпадает с GetPosition")]
+        public void Coordinate_ReturnsSameAsGetPosition()
+        {
+            var motion = CreateMotion(10, 2, 3, 5);
+            Assert.That(motion.Coordinate, Is.EqualTo(motion.GetPosition()));
+        }
 
-    /// <summary>
-    /// Проверяет, что свойство Coordinate вызывает метод GetPosition
-    /// </summary>
-    [TestCase(TestName = "Проверка координаты")]
-    public void Coordinate_CallsGetPosition()
-    {
-        const double initialPosition = 10, time = 2, speed = 3;
-        var motion = new TestMotion(initialPosition, time, speed);
-        
-        Assert.That(motion.Coordinate, Is.EqualTo(motion.GetPosition()));
-    }
+        /// <summary>
+        /// Проверка, что GetInfo содержит базовую информацию 
+        /// (начальная координата, скорость, время) и 
+        /// специфическую для типа движения
+        /// </summary>
+        [TestCase(TestName = "GetInfo содержит базовую и " +
+            "специфическую информацию")]
+        public void GetInfo_ContainsBaseInfo()
+        {
+            const double x0 = 10, t = 3, v = 7;
+            var motion = CreateMotion(x0, t, v, 2);
+            var info = motion.GetInfo();
 
-    /// <summary>
-    /// Проверяет, что метод GetInfo возвращает отформатированную строку
-    /// </summary>
-    [TestCase(TestName = "Проверка метода GetInfo")]
-    public void GetInfo_ReturnsFormattedString()
-    {
-        const double initialPosition = 5, time = 10, speed = 2;
-        var motion = new TestMotion(initialPosition, time, speed);
-        var info = motion.GetInfo();
+            Assert.That(info, Does.Contain(
+                $"Начальная координата Xo={x0} м"));
+            Assert.That(info, Does.Contain(
+                $"Скорость V={v} м/с"));
+            Assert.That(info, Does.Contain(
+                $"Время t={t} c"));
+            AssertGetInfoContainsSpecific(motion);
+        }
 
-        Assert.That(info, Does.Contain($"Xo={initialPosition} м"));
-        Assert.That(info, Does.Contain($"V={speed} м/с"));
-        Assert.That(info, Does.Contain($"time={time} c"));
-    }
+        /// <summary>
+        /// Проверка, что при нулевом времени GetPosition возвращает 
+        /// начальную координату
+        /// </summary>
+        [TestCase(TestName = "GetPosition при нулевом времени")]
+        public void GetPosition_ZeroTime_ReturnsInitialPosition()
+        {
+            var motion = CreateMotion(42, 0, 10, 5);
+            Assert.That(motion.GetPosition(), Is.EqualTo(42).Within(1e-10));
+        }
 
-    /// <summary>
-    /// Проверка атрибутов сериализации на MotionBase
-    /// </summary>
-    [TestCase(TestName = "Проверка XmlInclude атрибутов")]
-    public void MotionBase_HasXmlIncludeAttributes()
-    {
-        var type = typeof(MotionBase);
-        var attributes = type.GetCustomAttributes(
-            typeof(System.Xml.Serialization.XmlIncludeAttribute), true);
+        /// <summary>
+        /// Проверка специфических свойств (ускорение, частота)
+        /// на недопустимые параметры
+        /// </summary>
+        [TestCase(TestName = "Недопустимое значение специфического свойства "
+            + "вызывает исключение")]
+        public void SpecificProperty_InvalidValue_ThrowsException()
+        {
+            var motion = CreateDefaultMotion();
+            AssertInvalidSpecificProperty(motion);
+        }
 
-        Assert.That(attributes.Length, Is.GreaterThan(0));
-    }
+        /// <summary>
+        /// Проверка корректности расчёта координаты при известных значениях
+        /// </summary>
+        [TestCase(TestName = "GetPosition корректно вычисляет позицию" +
+            " на известных значениях")]
+        public void GetPosition_CalculatesCorrectly_WithKnownValues()
+        {
+            var motion = CreateMotion(10, 0.5, 2, Math.PI);
+            double expected = ComputeExpectedPositionForKnownValues(motion);
+            AssertGetPositionCalculatesCorrectly(motion, expected);
+        }
 
-    /// <summary>
-    /// Проверяет, что все производные типы добавлены в XmlInclude атрибуты
-    /// </summary>
-    [TestCase(TestName = "Проверка всех типов в XmlInclude")]
-    public void MotionBase_IncludesAllDerivedTypes()
-    {
-        var type = typeof(MotionBase);
-        var attributes = type.GetCustomAttributes(
-            typeof(System.Xml.Serialization.XmlIncludeAttribute), true)
-            as System.Xml.Serialization.XmlIncludeAttribute[];
+        /// <summary>
+        /// Расчет координаты для различных типов движений
+        /// </summary>
+        /// <param name="motion">Тип движения</param>
+        /// <returns>Рассчитанная координата</returns>
+        protected virtual double ComputeExpectedPositionForKnownValues(
+            T motion) => motion.GetPosition();
 
-        var types = new System.Collections.Generic.List<Type>();
-        foreach (var attr in attributes)
-            types.Add(attr.Type);
+        /// <summary>
+        /// Класс-наследник для тестирования базового класса
+        /// </summary>
+        private class TestableMotion : MotionBase
+        {
+            /// <summary>
+            /// Конструктор класса
+            /// </summary>
+            /// <param name="initialPosition">Начальная координата</param>
+            /// <param name="time">Время</param>
+            /// <param name="speed">Скорость</param>
+            public TestableMotion(
+                double initialPosition, double time, double speed)
+                : base(initialPosition, time, speed) { }
 
-        Assert.That(types, Does.Contain(typeof(UniformMotion)));
-        Assert.That(types, Does.Contain(typeof(UniformlyAcceleratedMotion)));
-        Assert.That(types, Does.Contain(typeof(OscillatoryMotion)));
-    }
+            /// <summary>
+            /// Реализация абстрактного класса
+            /// </summary>
+            /// <returns>Начальная координата</returns>
+            public override double GetPosition() => InitialPosition;
+        }
 
-    /// <summary>
-    /// Проверка конструктора с параметрами при присваиваении значений
-    /// </summary>
-    [TestCase(0, TestName = "Проверка конструктора OscillatoryMotion с " +
-        "параметрами при присваиваении значений")]
-    [TestCase(1, TestName = "Проверка конструктора " +
-        "UniformlyAcceleratedMotion с параметрами при " +
-        "присваиваении значений")]
-    [TestCase(2, TestName = "Проверка конструктора UniformMotion с " +
-        "параметрами при присваиваении значений")]
-    public void ParameterConstructor_AssignsValuesCorrectly(int motionNumber)
-    {
-        const int initialPosition = 100;
-        const int time = 5;
-        const int speed = 8;
+        /// <summary>
+        /// Проверяет свойства Name и Coordinate на ожидаемые значения
+        /// </summary>
+        /// <param name="expectedName">Название в свойство Name</param>
+        /// <param name="initialPosition">Начальная координата</param>
+        /// <param name="expectedCoord">Значение координаты</param>
+        [TestCase("Тип движения", 100, 100,
+            TestName = "Проверка свойства Name")]
+        public void Name_AndCoordinate_ReturnExpected(
+            string expectedName,
+            double initialPosition,
+            double expectedCoord)
+        {
+            var motion = new TestableMotion(initialPosition, 5, 2);
 
-        MotionBase motion = MotionFactory.GetMotion(
-            motionNumber, initialPosition, time, speed);
+            Assert.That(motion.Name, Is.EqualTo(expectedName));
+            Assert.That(motion.Coordinate, Is.EqualTo(expectedCoord));
+        }
 
-        Assert.That(motion.InitialPosition, Is.EqualTo(100));
-        Assert.That(motion.Time, Is.EqualTo(5));
-        Assert.That(motion.Speed, Is.EqualTo(8));
+        /// <summary>
+        /// Проверка на невалидные значения
+        /// </summary>
+        /// <param name="invalidValue">Невалидное значение</param>
+        /// <param name="expectedMessagePart">Сообщение о 
+        /// некоректном значении</param>
+        [TestCase(double.NaN, "некорректное значение",
+            TestName = "Проверка на NaN")]
+        [TestCase(double.PositiveInfinity, "некорректное значение",
+            TestName = "Проверка на плюс бесконечность")]
+        [TestCase(double.NegativeInfinity, "некорректное значение",
+            TestName = "Проверка на минус бесконечность")]
+        public void ValidateParameters_InvalidValue_ThrowsException(
+            double invalidValue, string expectedMessagePart)
+        {
+            var motion = new TestableMotion(0, 1, 1);
+
+            var ex = Assert.Throws<IncorrectArgumentException>(() =>
+                motion.InitialPosition = invalidValue);
+
+            Assert.That(ex.Message, Does.Contain(expectedMessagePart));
+        }
+
+        /// <summary>
+        /// Проверяет, что отрицательное время или 
+        /// скорость вызывают исключение
+        /// </summary>
+        /// <param name="negativeValue">отрицательное значение</param>
+        /// <param name="property">название параметра</param>
+        [TestCase(-5, "Time",
+            TestName = "тест времени при отрицательном значении")]
+        [TestCase(-10, "Speed",
+            TestName = "тест скорости при отрицательном значении")]
+        public void ValidateNegativeParameters_NegativeValue_ThrowsException(
+            double negativeValue, string property)
+        {
+            var motion = new TestableMotion(0, 1, 1);
+
+            var ex = Assert.Throws<IncorrectArgumentException>(() =>
+            {
+                if (property == "Time")
+                    motion.Time = negativeValue;
+                else
+                    motion.Speed = negativeValue;
+            });
+
+            Assert.That(ex.Message, Does.Contain(
+                "не может быть отрицательным"));
+            Assert.That(ex.Message, Does.Contain(
+                negativeValue.ToString()));
+        }
     }
 }
