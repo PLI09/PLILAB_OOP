@@ -93,7 +93,6 @@ namespace ModelTests
             "специфическую информацию")]
         public void GetInfo_ContainsBaseInfo()
         {
-            //TODO: RSDN+
             const double x0 = 10;
             const double t = 3;
             const double v = 7;
