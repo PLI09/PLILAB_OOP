@@ -93,8 +93,10 @@ namespace ModelTests
             "специфическую информацию")]
         public void GetInfo_ContainsBaseInfo()
         {
-            //TODO: RSDN
-            const double x0 = 10, t = 3, v = 7;
+            //TODO: RSDN+
+            const double x0 = 10;
+            const double t = 3;
+            const double v = 7;
             var motion = CreateMotion(x0, t, v, 2);
             var info = motion.GetInfo();
 
